@@ -1,6 +1,6 @@
 #!/bin/bash
 # A.Walther 7 Nov 2013
-# $Header: https://svn.ssec.wisc.edu/repos/cloud_team_clavrx/branches/new_cloud_mask/clavrx_scripts/install_clavrx.sh 150 2014-03-25 15:04:28Z awalther $
+# $Header: https://svn.ssec.wisc.edu/repos/cloud_team_clavrx/trunk/clavrx_scripts/install_clavrx.sh 150 2014-03-25 15:04:28Z awalther $
 #!/bin/bash
 #
 #   history 20 January 2014: changed to patmosx branch of clavrx (AW)
