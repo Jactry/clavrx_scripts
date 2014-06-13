@@ -12,7 +12,7 @@
 set -e
 
 #hdf5_path="/opt/hdf5-1.8.8-intel"
-h#df4_path="/usr/local/hdf4"
+#df4_path="/usr/local/hdf4"
 
 # for convinience: symbol link to local directory
 # I encourage everybody to do this on all machines
