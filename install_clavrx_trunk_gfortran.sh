@@ -10,8 +10,7 @@
 
 set -e
 
-hdf5_path="/opt/hdf5-1.8.8-intel"
-hdf4_path="/usr/local/hdf4"
+
 
 # for convinience: symbol link to local directory
 # I encourage everybody to do this on all machines
@@ -19,6 +18,8 @@ hdf4_path="/usr/local/hdf4"
 # ln -s <hdf5_path> ~/lib/hdf5
 hdf5_path=$HOME"/lib/hdf5/"
 hdf4_path=$HOME"/lib/hdf4/"
+hdf5_path=$HOME"/lib/hdf5_gfortran/"
+
 
 path='clavrx_trunk'
 if [ -n "$1" ]
