@@ -23,7 +23,7 @@ mkdir -p  $path
 cd $path
 svn checkout -q https://svn.ssec.wisc.edu/repos/cloud_team_dcomp/branches/fortran95_framework/ ./
 
-./configure -hdf5root=$hdf5_path -with-gfortran -hdflib=${hdf4_path}/lib/ -hdfinc=${hdf4_path}/include/
+./configure -with-gfortran -hdflib=${hdf4_path}/lib/ -hdfinc=${hdf4_path}/include/
 
 if make; then 
   printf '\033[32m Clavrx trunk successfully installed %s\033[m\n'
