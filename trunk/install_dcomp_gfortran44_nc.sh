@@ -31,4 +31,4 @@ else
    ret=$?
    printf '\033[31m Error !!!! clavrx trunk is not installed  error code $ret %s\033[m\n'
 fi
-./dcomp_one_pixel_run
+./dcomp_one_pixel_run -sen VIIRS -obs2 0.11
