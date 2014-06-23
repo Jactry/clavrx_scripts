@@ -5,6 +5,8 @@ set -e
 hdf5_path=$HOME"/lib/hdf5/"
 hdf4_path=$HOME"/lib/hdf4/"
 
+hdf4_path=$HOME"/lib/ncdf/"
+
 path='dcomp_software'
 if [ -n "$1" ]
 then
@@ -15,13 +17,13 @@ echo
 echo -e "\033[1mDCOMP TRUNK will be installed in ===> $path \033[0m"
 echo
 echo
-echo "...........     SVN $path checkout/update programs ................."
+echo "...........     SVN DCOMP Fortran95 $path checkout/update programs ................."
 echo
 mkdir -p  $path
 cd $path
-svn checkout -q https://svn.ssec.wisc.edu/repos/cloud_team_dcomp/trunk/ ./
+svn checkout -q https://svn.ssec.wisc.edu/repos/cloud_team_dcomp/branches/fortran95_framework/ ./
 
-./configure -hdf5root=$hdf5_path -with-ifort -hdflib=${hdf4_path}/lib
+./configure -hdf5root=$hdf5_path -with-gfortran -hdflib=${hdf4_path}/lib
 
 if make; then 
   printf '\033[32m Clavrx trunk successfully installed %s\033[m\n'
