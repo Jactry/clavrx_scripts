@@ -1,5 +1,5 @@
 #!/bin/sh
-# $Id$
+# $Id:$
 args=("$@")
 year=${args[0]} 
 doy0=${args[1]} 
