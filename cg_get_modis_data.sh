@@ -145,7 +145,7 @@ else
 fi
 
 
-
+echo "hallo"
 
 
 
@@ -214,7 +214,7 @@ fi
 mkdir -p $L1B_PATH
 echo $L1B_PATH
 
-
+   
 
       sh -c './cg_peate_downloader.sh --path '$L1B_PATH' --ll '$ll_lat' '$ll_lon' --ur '$ur_lat' '$ur_lon' '$YEAR'-'$MONTH'-'$DAY'+'$HOUR0':'$MINU0':00 '$YEAR'-'$MONTH'-'$DAY'+'$HOUR1':'$MINU1':00 MYD03.006 MYD021KM.006 MOD03 MOD021KM'
 
