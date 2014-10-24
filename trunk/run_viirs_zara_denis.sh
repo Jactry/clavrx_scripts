@@ -1,5 +1,5 @@
 #!/bin/sh
-# $Id: run_viirs.sh,v 1.4 2012/08/02 07:01:51 awalther Exp $
+# $Id$
 # !!!!! TO RUN ON THE CLUSTER !!!!!!!!!
 # qsub -q all.q -S /bin/bash -l matlab=0 -l friendly=1 -p -200 run_viirs.sh
 # qsub -q r720.q -l vf=4G -S /bin/bash -l matlab=0 -l friendly=1 -p -200 run_viirs.sh

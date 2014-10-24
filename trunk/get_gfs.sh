@@ -1,5 +1,5 @@
 #!/bin/bash
-# $Id: get_gfs.sh,v 1.4 2012/10/22 16:18:09 awalther Exp $
+# $Id$
 
 args=("$@") 
 year=${args[0]} 
