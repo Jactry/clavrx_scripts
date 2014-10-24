@@ -62,7 +62,7 @@ filetype='D021KM'
 
 region=$REG
 
-echo "+++++++++++VIIRS PROCESSING ++++++++++++"
+echo "+++++++++++MODIS PROCESSING ++++++++++++"
 
 
 # --- Loop days
