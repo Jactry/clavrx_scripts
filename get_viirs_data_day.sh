@@ -1,5 +1,5 @@
 #!/bin/sh
-# $Id: get_viirs_data.sh,v 1.7 2013/04/18 16:36:37 awalther Exp $
+# $Id$
 
 args=("$@") 
 year=${args[0]} 

@@ -1,5 +1,5 @@
 #!/bin/sh
-# $Id: run_viirs_exact.sh,v 1.2 2013/04/18 19:17:00 awalther Exp $
+# $Id$
 
 args=("$@")
 year=${args[0]} 
