@@ -133,7 +133,7 @@ do
 		  echo $tmp_script
 		 #$tmp_script
 		
-		# qsub -q r720.q -l vf=4G -S /bin/bash -l matlab=0 -l friendly=1 -p -00 -o $logs_path -e $logs_path -l h_rt=01:00:00 $tmp_script
+		  qsub -q r720.q -l vf=4G -S /bin/bash -l matlab=0 -l friendly=1 -p -00 -o $logs_path -e $logs_path -l h_rt=01:00:00 $tmp_script
    done
 done
 
