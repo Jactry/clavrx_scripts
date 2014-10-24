@@ -47,7 +47,7 @@ for ft in $TYPES; do
  
 done
 
- URL="$URL&loc=25,-130"
+ URL="$URL&loc=43,-89"
   URL="$URL&radius=2000"
 echo "$URL"
 
