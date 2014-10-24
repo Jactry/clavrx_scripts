@@ -185,12 +185,13 @@ if  [ $REG ]; then
          ur_lon=25
       ;;   
       
-      global)
-      ll_lat=-80
+      global)  
+         echo "global"
+         ll_lat=-80
          ll_lon=-170
          ur_lat=80
          ur_lon=170
-	  
+	  ;;
 	  
       *)
       echo "unknown area"
