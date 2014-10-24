@@ -66,7 +66,7 @@ echo "All files are there"
 }
 
 
-satname='modis'
+satname='mods'
 BASE_PATH=$HOME"/Satellite_Input/"$satname"/"
 
 
