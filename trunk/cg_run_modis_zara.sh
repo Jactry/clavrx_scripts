@@ -84,8 +84,8 @@ do
   		out_path=$data_root_path'/Satellite_Output/'$satname'/'$region'/'$year'/'$doy_str'/'$hhh_str'/'
 		
 		# !!!!!!!!! CREATE A NEW TEMP SCRIPT TO SUBMIT IT TO ZARA
-   		tmp_script=$work_dir'npp_'$year'_'$doy_str'_'$hhh_str'_'$region'_patmosx.sh'
-   		tmp_work_dir=$work_dir'npp_'$year'_'$doy_str'_'$hhh_str'_'$region
+   		tmp_script=$work_dir'modis_'$year'_'$doy_str'_'$hhh_str'_'$region'_patmosx.sh'
+   		tmp_work_dir=$work_dir'modis_'$year'_'$doy_str'_'$hhh_str'_'$region
 		
    		echo "#!/bin/sh" > $tmp_script
    		echo "source /etc/bashrc" >> $tmp_script
@@ -124,7 +124,7 @@ do
    		#echo "./sync_viirs_zara.sh $l1b_path" >> $tmp_script
 
    		#echo "echo 'Writing files to the filelist'" >> $tmp_script
-   		echo "./write_filelist.sh $l1b_path $out_path $filetype d$year$month$day t$hhh_str" >> $tmp_script
+   		echo "./write_filelist.sh $l1b_path $out_path $filetype $year$month$dd .${hhh_str}??." >> $tmp_script
    		echo "echo 'Checking files, if already processed delete them from the filelist'" >> $tmp_script
    		#echo "./check_filelist_zara.sh $filelist $filetype" >> $tmp_script
    		echo "echo 'Starting CLAVR-x'" >> $tmp_script
