@@ -49,7 +49,7 @@ data_root_path='/fjord/jgs/patmosx/'
 work_dir='/fjord/jgs/personal/awalther/patmosx_processing/scripts/'
 mkdir -p $work_dir
 
-script_path='/home/awalther/ALGO/clavrx_scripts/'
+script_path='/home/awalther/ALGO/clavrx_scripts/trunk/'
 
 logs_path='/fjord/jgs/personal/awalther/logs/'
 mkdir -p $logs_path
