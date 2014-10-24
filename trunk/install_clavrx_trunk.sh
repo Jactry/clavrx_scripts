@@ -20,17 +20,6 @@ hdf4_path="/usr/local/hdf4"
 hdf5_path=$HOME"/lib/hdf5/"
 hdf4_path=$HOME"/lib/hdf4/"
 
-
-# check if netcdf id enabled in hdf4 libraries
-grep -i netCDF ${hdf4_path}/lib/libhdf4.settings | grep -q yes
-
-if [ $? -ne 0 ]; then
-   echo -e " hdf4 library is not installed with netCDF"
-   echo -e " download from saga or re-install hdf4 lib with netcdf flag  "
-   echo -e " or ask andi.walther@ssec.wisc.edu ... exit"
-   exit
-fi 
-
 path='clavrx_trunk'
 if [ -n "$1" ]
 then
