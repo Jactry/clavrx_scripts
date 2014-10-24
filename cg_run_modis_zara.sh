@@ -44,7 +44,7 @@ hour0=0
 hour1=23
 
 # definitions 
-satname='modis'
+satname='mods'
 data_root_path='/fjord/jgs/patmosx/'
 work_dir='/fjord/jgs/personal/awalther/patmosx_processing/scripts/'
 mkdir -p $work_dir
