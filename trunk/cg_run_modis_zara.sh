@@ -124,7 +124,7 @@ do
    		#echo "./sync_viirs_zara.sh $l1b_path" >> $tmp_script
 
    		#echo "echo 'Writing files to the filelist'" >> $tmp_script
-   		echo "./write_filelist.sh $l1b_path $out_path $filetype $year$month$dd .${hhh_str}??." >> $tmp_script
+   		echo "./write_filelist.sh $l1b_path $out_path $filetype $year$month$dd .${hhh_str}" >> $tmp_script
    		echo "echo 'Checking files, if already processed delete them from the filelist'" >> $tmp_script
    		#echo "./check_filelist_zara.sh $filelist $filetype" >> $tmp_script
    		echo "echo 'Starting CLAVR-x'" >> $tmp_script
