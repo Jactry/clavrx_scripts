@@ -54,10 +54,15 @@ if [ -f $down_file ] ; then
   rm temp.txt
   stat=1
 fi
+count=4
+eins=1
+while [ $stat -eq 1 ] &&  [ $count -lt 10 ]
 
-while [ $stat -eq 1 ]
+
 do
-   redo_it
+   redo_it 
+   count=$(($count+1))
+   
 done
 
 cd $curr_dir
@@ -66,7 +71,8 @@ echo "All files are there"
 }
 
 
-satname='modis'
+satname='modis_andi/'
+
 BASE_PATH=$HOME"/Satellite_Input/"$satname"/"
 
 
@@ -99,7 +105,7 @@ echo $YEARDOY
 YEAR=${YEARDOY:0:4}
 DOY=${YEARDOY:4:3}
 
-echo $YEAR,$DOY' <===='
+
 
 
 HOUR0='00'
@@ -137,15 +143,12 @@ if date -v 1d > /dev/null 2>&1; then
   DAY_OBS=$(./shift_date.sh ${YEAR}0101 +${doy_dum})
   MONTH=${DAY_OBS:4:2}
   DAY=${DAY_OBS:6:2}
-  echo "hier", $DAY,$doy_dum
+  
 else
   MONTH=$(date -d "01/01/${YEAR} +${DOY} days -1 day" "+%m")
   DAY=$(date -d "01/01/${YEAR} +${DOY} days -1 day" "+%d") 
-  echo "dort"
+ 
 fi
-
-
-echo "hallo"
 
 
 
@@ -215,14 +218,14 @@ fi
 if [ ! $L1B_PATH ];
 then
 
-	L1B_PATH=$HOME'/Satellite_Input/'$satname'/'$YEAR'/'$DOY'/'$REG
+	L1B_PATH=$HOME'/Satellite_Input/'$satname'/'$REG'/'$YEAR'/'$DOY
 fi
-
+echo "l1b path: "$L1B_PATH
 mkdir -p $L1B_PATH
 echo $L1B_PATH
 
    
 
-      sh -c './cg_peate_downloader.sh --path '$L1B_PATH' --ll '$ll_lat' '$ll_lon' --ur '$ur_lat' '$ur_lon' '$YEAR'-'$MONTH'-'$DAY'+'$HOUR0':'$MINU0':00 '$YEAR'-'$MONTH'-'$DAY'+'$HOUR1':'$MINU1':00 MYD03.006 MYD021KM.006 MOD03 MOD021KM'
+      sh -c 'cg_peate_downloader.sh --path '$L1B_PATH' --ll '$ll_lat' '$ll_lon' --ur '$ur_lat' '$ur_lon' '$YEAR'-'$MONTH'-'$DAY'+'$HOUR0':'$MINU0':00 '$YEAR'-'$MONTH'-'$DAY'+'$HOUR1':'$MINU1':00 MYD03.006 MYD021KM.006 MOD03 MOD021KM'
 
-#check_download $L1B_PATH
+check_download $L1B_PATH
