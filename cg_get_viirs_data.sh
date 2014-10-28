@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-#  $Id:$
+#  $Id$
 #
 function usage() {
 
@@ -205,7 +205,7 @@ fi
 if [ ! $L1B_PATH ];
 then
 
-	L1B_PATH=$HOME'/Satellite_Input/'$satname'/'$YEAR'/'$DOY'/'$REG
+	L1B_PATH=$HOME'/Satellite_Input/'$satname'/'$REG'/'$YEAR'/'$DOY
 fi
 
 mkdir -p $L1B_PATH

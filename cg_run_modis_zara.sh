@@ -44,7 +44,7 @@ hour0=0
 hour1=23
 
 # definitions 
-satname='modis'
+satname='modis_andi'
 data_root_path='/fjord/jgs/patmosx/'
 work_dir='/fjord/jgs/personal/awalther/patmosx_processing/scripts/'
 mkdir -p $work_dir
@@ -84,8 +84,8 @@ do
   		out_path=$data_root_path'/Satellite_Output/'$satname'/'$region'/'$year'/'$doy_str'/'$hhh_str'/'
 		
 		# !!!!!!!!! CREATE A NEW TEMP SCRIPT TO SUBMIT IT TO ZARA
-   		tmp_script=$work_dir'modis_'$year'_'$doy_str'_'$hhh_str'_'$region'_patmosx.sh'
-   		tmp_work_dir=$work_dir'modis_'$year'_'$doy_str'_'$hhh_str'_'$region
+   		tmp_script=$work_dir'modis_andi'$year'_'$doy_str'_'$hhh_str'_'$region'_patmosx.sh'
+   		tmp_work_dir=$work_dir'modis_andi'$year'_'$doy_str'_'$hhh_str'_'$region
 		
    		echo "#!/bin/sh" > $tmp_script
    		echo "source /etc/bashrc" >> $tmp_script

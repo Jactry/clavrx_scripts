@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# $Id:$
+# $Id$
 #
 
 function usage() {
@@ -186,7 +186,7 @@ if [ ! $L1B_PATH ]; then
 fi
 
 
-echo $L1B_PATH
+echo "l1b path in downloader: "$L1B_PATH
 SCRIPT=downloader.sh
 wget -q -O $SCRIPT ${URL}
 
