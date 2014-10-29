@@ -9,6 +9,7 @@ cat<< EOF
 CG_GET_VIIRS_DATA
 
 need help? bad luck,  sorry!
+> cg_get_modis_data.sh <yyyydoy> <hh>
 ask denis.botambekov@ssec.wisc.edu or andi.walther@ssec.wisc.edu 
 
 EOF
@@ -19,18 +20,18 @@ EOF
 function redo_it () {
 #  echo "Check files again"
 
-sch_path=$l1b_path'/*hdf'
-echo $sch_path
-num_real_files=`ls -1 $sch_path | wc -l`
-echo "Real $num_real_files"
+	sch_path=$l1b_path'/*hdf'
+	echo $sch_path
+	num_real_files=`ls -1 $sch_path | wc -l`
+	echo "Real $num_real_files"
 
-if [ "$num_real_files" -ne "$num_need_files" ]
-then
-   echo "Not enough files"
-   cd $l1b_path
-   bash $down_file
-   stat=1
-else
+	if [ "$num_real_files" -ne "$num_need_files" ]
+	then
+   		echo "Not enough files real file/needed files : "$num_real_files" "$num_need_files
+   		cd $l1b_path
+  		 bash $down_file
+  		 stat=1
+	else
    stat=0
 fi
 return $stat
@@ -105,12 +106,9 @@ echo $YEARDOY
 YEAR=${YEARDOY:0:4}
 DOY=${YEARDOY:4:3}
 
-
-
-
 HOUR0='00'
 MINU0='00'
- MINU1='59'
+MINU1='59'
 
 if [ $n -gt 1 ]; then
    TIME0=$2 
@@ -123,7 +121,6 @@ if [ $n -gt 1 ]; then
 fi 
 
 HOUR1=$HOUR0
-
 
 if [ $n -gt 2 ]; then
    TIME1=$3 
