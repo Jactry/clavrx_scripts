@@ -75,17 +75,14 @@ do
 
    echo 'Processing DOY: ' $doy_str,$month$day
    
-   # loop hours
-    for (( hhh = $hour0; hhh <= $hour1; hhh ++ ))
-	do
-   		hhh_str=$(printf "%.2d" ${hhh} )
+  
    		
-		l1b_path=$data_root_path'/Satellite_Input/seviri/'$year'_'$doy_str'/'
+		l1b_path=$data_root_path'/Satellite_Input/seviri/AMET10/'$year'_'$doy_str'/'
   		out_path=$data_root_path'/Satellite_Output/seviri/'$year'_'$doy_str'/' 
 		
 		# !!!!!!!!! CREATE A NEW TEMP SCRIPT TO SUBMIT IT TO ZARA
    		tmp_script=$work_dir'seviri_'$year'_'$doy_str'_patmosx.sh'
-   		tmp_work_dir=$work_dir'seviri_'$year'_'$doy_str'_patmosx.sh'
+   		tmp_work_dir=$work_dir'seviri_'$year'_'$doy_str
 		
    		echo "#!/bin/sh" > $tmp_script
    		echo "source /etc/bashrc" >> $tmp_script
@@ -100,9 +97,7 @@ do
    		echo "mkdir -v -p $tmp_work_dir/temporary_files" >> $tmp_script
 		
 		echo "cp -r $script_path/*.sh $tmp_work_dir" >> $tmp_script
-		
-		
- 
+
    		echo "cp $clavrx_path/clavrx_bin/clavrxorb $tmp_work_dir" >> $tmp_script
    		echo "cp $clavrx_path/clavrx_bin/comp_asc_des_level2b $tmp_work_dir" >> $tmp_script
    		echo "cp $clavrx_path/$options $tmp_work_dir" >> $tmp_script
@@ -113,8 +108,6 @@ do
    		echo "echo 'Linking Ancil Data'" >> $tmp_script
    		
 		echo "[ ! -d $tmp_work_dir/clavrx_ancil_data ] && ln -s /fjord/jgs/patmosx/Ancil_Data/clavrx_ancil_data $tmp_work_dir" >> $tmp_script
-   		
-   		
 
    		echo "echo 'Getting l1b data'" >> $tmp_script
    		echo "cd $tmp_work_dir" >> $tmp_script
@@ -123,7 +116,7 @@ do
    		#echo "./sync_viirs_zara.sh $l1b_path" >> $tmp_script
 
    		#echo "echo 'Writing files to the filelist'" >> $tmp_script
-   		echo "./write_filelist.sh $l1b_path $out_path $filetype $year_$doy_str_$hhh_str}" >> $tmp_script
+   		echo "./write_filelist.sh $l1b_path $out_path $filetype $year_$doy_str" >> $tmp_script
    		echo "echo 'Checking files, if already processed delete them from the filelist'" >> $tmp_script
    		#echo "./check_filelist_zara.sh $filelist $filetype" >> $tmp_script
    		echo "echo 'Starting CLAVR-x'" >> $tmp_script
@@ -132,9 +125,9 @@ do
 		  echo $tmp_script
 		 #$tmp_script
 		
-		  qsub -q r720.q -l vf=4G -S /bin/bash -l matlab=0 -l friendly=1 -p -00 -o $logs_path -e $logs_path -l h_rt=01:00:00 $tmp_script
+		  qsub -q r720.q -l vf=10G -S /bin/bash -l matlab=0 -l friendly=1 -p -00 -o $logs_path -e $logs_path -l h_rt=01:00:00 $tmp_script
    done
-done
+
 
 
 
