@@ -13,6 +13,7 @@ set -e
 
 hdf5_path="/opt/hdf5-1.8.8-intel"
 hdf4_path="/usr/local/hdf4"
+ncdf_path = 
 
 # for convinience: symbol link to local directory
 # I encourage everybody to do this on all machines
@@ -20,7 +21,7 @@ hdf4_path="/usr/local/hdf4"
 # ln -s <hdf5_path> ~/lib/hdf5
 hdf5_path=$HOME"/lib/hdf5/"
 hdf4_path=$HOME"/lib/hdf4/"
-
+ncdf_path = $HOME"/lib/netcdf3/"
 
 branch=$1
 branch_version=clavrx_${branch}
@@ -74,7 +75,7 @@ cd ../nlcomp
 
 cd ../main_src
 cp level2_all_on.inc level2.inc
-./configure -hdf5root=$hdf5_path -with-ifort  -hdflib=${hdf4_path}/lib -hdfinc=${hdf4_path}/include -nlcomp_dir=../nlcomp/ -dcomp_dir=../dcomp/ -acha_dir=../cloud_acha/
+./configure -hdf5root=$hdf5_path -with-ifort  -hdflib=${hdf4_path}/lib -hdfinc=${hdf4_path}/include -nlcomp_dir=../nlcomp/ -dcomp_dir=../dcomp/ -acha_dir=../cloud_acha/ -netcdflib=${netcdf_path}
 
 
 
