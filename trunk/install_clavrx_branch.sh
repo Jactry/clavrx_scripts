@@ -21,7 +21,7 @@ hdf4_path="/usr/local/hdf4"
 # ln -s <hdf5_path> ~/lib/hdf5
 hdf5_path=$HOME"/lib/hdf5/"
 hdf4_path=$HOME"/lib/hdf4/"
-ncdf_path = $HOME"/lib/netcdf3/"
+ncdf_path=$HOME"/lib/netcdf3/"
 
 branch=$1
 branch_version=clavrx_${branch}
@@ -65,6 +65,7 @@ cd $path
 
 svn checkout -q https://svn.ssec.wisc.edu/repos/cloud_team_clavrx/branches/${branch} ./
 
+svn checkout -q https://svn.ssec.wisc.edu/repos/cloud_team_cmask 
 
 cd dcomp
 ./configure -hdf5root=$hdf5_path -with-ifort -hdflib=${hdf4_path}/lib
@@ -75,7 +76,7 @@ cd ../nlcomp
 
 cd ../main_src
 cp level2_all_on.inc level2.inc
-./configure -hdf5root=$hdf5_path -with-ifort  -hdflib=${hdf4_path}/lib -hdfinc=${hdf4_path}/include -nlcomp_dir=../nlcomp/ -dcomp_dir=../dcomp/ -acha_dir=../cloud_acha/ -netcdflib=${netcdf_path}
+./configure -hdf5root=$hdf5_path -with-ifort  -hdflib=${hdf4_path}/lib -hdfinc=${hdf4_path}/include -nlcomp_dir=../nlcomp/ -dcomp_dir=../dcomp/ -acha_dir=../cloud_acha/ -netcdflib=${ncdf_path}
 
 
 
