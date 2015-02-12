@@ -9,34 +9,34 @@
 
 # --- Set year, date, etc.
 # !!!!! ATTENTION: CODE SKIPS DAYS AND YEARS THAT ARE OUT OF A SATELLITE LIFE !!!!!
-year_start=2013
-year_end=2013 #$year_start
-doy_start=173
-doy_end=$doy_start #366
+year_start=2000
+year_end=2014 #$year_start
+doy_start=1
+doy_end=366 #$doy_start #366
 hour0=0  # 0
 hour1=23  #$hour0 #23
 day_night=''   # set for downloading 1b data: 'D' = day; 'N' = night; '' = day+night
 
 # --- Set satellite id (life time is in the parenthesis - year,doy)
-# !!!!! ATTENTION: THIS ID NUMBERS CREATED BY DENIS B. IF CHANGED CHECK level2b_script.sh FILE !!!!!
+# !!!!! ATTENTION: THESE ID NUMBERS CREATED BY DENIS B. IF CHANGED CHECK level2b_script.sh FILE !!!!!
 #  1 = METOP-01 (2012,268-now);      2 = METOP-02 (2007,180-now);      5 = NOAA-05 (1978,309-1980,030);  6 = NOAA-06 (1979,181-1981,244); 
 #  7 = NOAA-07 (1981,236-1985,032);  8 = NOAA-08 (1983,136-1985,287);  9 = NOAA-09 (1985,056-1988,312); 10 = NOAA-10 (1986,321-1991,259);
 # 11 = NOAA-11 (1988,313-1994,289); 12 = NOAA-12 (1991,259-1998,348); 13 = NOAA-13 (-----------------); 14 = NOAA-14 (1995,020-2002,280); 
 # 15 = NOAA-15 (1998,299-now);      16 = NOAA-16 (2001,001-2011,365); 17 = NOAA-17 (2002,176-2011,365); 18 = NOAA-18 (2005,200-now); 
 # 19 = NOAA-19 (2009,037-now);     
 # 20 = MOD021KM(2000,055-now);  21 = MYD021KM (2002,185-now);  22 = MOD02SSH;  23 = MYD02SSH;  30 = VIIRS (2011,325-now)
-sat_id=30
+sat_id=22
 
 # --- Set region limits
 # 0 = global;        1 = 45S - 45N;     2 = Great Lakes; 3 = South Atlantic
 # 4 = North Pacific; 5 = South Pacific; 6 = Samoa;       7 = Europe
 # 8 = USA;           9 = Brazil;        10 = Azores;     11 = China
 # 12 = Sahara;       13 = Dom-C;        14 = Greenland
-grid=0
+grid=4
 
 # --- Set flag to get and delete data
 # !!!!! ATTENTION: FOR AVHRR SET flag_get_1b_data AND flag_delete_l1b TO 0 !!!!!
-flag_get_1b_data=0   # set to 1 if download data from peate
+flag_get_1b_data=0   # set to 1 if need to download data from peate
 flag_reprocess_l2_files=1   # if set to 0 it would skip already existing level2 files
 flag_make_l2=1   # if set to 1 it creats level2 files
 flag_delete_l1b=0   # if set to 1 it deletes level1b data
@@ -51,8 +51,9 @@ work_dir='/fjord/jgs/personal/dbotambekov/patmosx_processing/scripts/'
 zara_files_path='/home/dbotambekov/src_clavrx_code/zara_run/'
 logs_path='/fjord/jgs/personal/dbotambekov/patmosx_processing/logs/'
 filelist='clavrxorb_file_list'
-clavrx_run_file='clavrxorb_andy_v833'  # clavrxorb_trunk
+clavrx_run_file='clavrxorb_trunk'  # clavrxorb_trunk
 clavrx_l2b_run_file='comp_asc_des_level2b'
+qsub_node='all.q'   # could be 'all.q' or 'r720.q' 
 
 
 # --- !!! END USER INPUT !!!
@@ -415,16 +416,19 @@ do
        doy_str=$doy
      fi
 
+     # --- calculate month, day, number of hours per this day
      month=$(date -d "01/01/${year} +${doy} days -1 day" "+%m")
      day=$(date -d "01/01/${year} +${doy} days -1 day" "+%d")
+     hour_tot=$[hour1-hour0+1]
+     #$ -t 1-$hour_tot
 
      # --- Loop through the hours
      for (( hhh = $hour0; hhh <= $hour1; hhh ++ ))
      do
-        hhh_str=S$hhh
+        hhh_str=$hhh
         hhh_str1=$hhh
         if [ $hhh -lt 10 ] ; then
-           hhh_str=S`expr 0$hhh`
+           hhh_str=`expr 0$hhh`
            hhh_str1=`expr 0$hhh`
         fi
 
@@ -517,13 +521,12 @@ do
            echo "rm $tmp_script" >> $tmp_script
 
            # --- Submit job to zara for downloading level 1b data and/or process level 2 and save IDs for the future
-           jobID_tmp=`qsub -q r720.q -l vf=4G -S /bin/bash -l matlab=0 -l friendly=1 -p -200 -o $logs_path -e $logs_path -l h_rt=10:00:00 $tmp_script`
+           jobID_tmp=`qsub -q $qsub_node -l vf=4G -S /bin/bash -l matlab=0 -l friendly=1 -p -200 -o $logs_path -e $logs_path -l h_rt=10:00:00 $tmp_script`
            echo $jobID_tmp
            jobID[$hhh]=`echo $jobID_tmp | awk 'match($0,/[0-9]+/){print substr($0, RSTART, RLENGTH)}'`
          fi
 
       done # hours loop
-
 
       # --- Make Level 2b Files
       # !!! To make level 2b we need to wait until all scripts for that date are done
@@ -562,7 +565,12 @@ do
 
          # --- Submit job to zara for processing level 2b
          cd $work_dir
-         qsub -q r720.q -l vf=4G -S /bin/bash -l matlab=0 -l friendly=1 -p -200 -o $logs_path -e $logs_path -l h_rt=06:00:00 -hold_jid ${jobID_com[@]} $tmp_script_l2b_2
+         if [ $flag_make_l2 -ne 0 ] ; then
+            qsub -q $qsub_node -l vf=4G -S /bin/bash -l matlab=0 -l friendly=1 -p -200 -o $logs_path -e $logs_path -l h_rt=06:00:00 -hold_jid ${jobID_com[@]} $tmp_script_l2b_2
+         else
+            qsub -q $qsub_node -l vf=4G -S /bin/bash -l matlab=0 -l friendly=1 -p -200 -o $logs_path -e $logs_path -l h_rt=06:00:00 $tmp_script_l2b_2
+         fi
+            
       fi
 
    done # days loop
