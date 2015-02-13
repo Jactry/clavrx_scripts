@@ -141,7 +141,7 @@ TYPES=$*
 
 
 OUTPUT=wget
-URL="http://peate.ssec.wisc.edu/flo/api/find?start=$START&end=$END&output=$OUTPUT"
+URL="http://sips.ssec.wisc.edu/flo/api/find?start=$START&end=$END&output=$OUTPUT"
 
 for ft in $TYPES; do
 	URL="$URL&file_type=$ft"
