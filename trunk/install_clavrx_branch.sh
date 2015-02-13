@@ -65,7 +65,7 @@ cd $path
 
 svn checkout -q https://svn.ssec.wisc.edu/repos/cloud_team_clavrx/branches/${branch} ./
 
-svn checkout -q https://svn.ssec.wisc.edu/repos/cloud_team_cmask 
+
 
 cd dcomp
 ./configure -hdf5root=$hdf5_path -with-ifort -hdflib=${hdf4_path}/lib
