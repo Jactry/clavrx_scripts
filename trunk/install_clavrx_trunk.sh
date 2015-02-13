@@ -58,7 +58,7 @@ cd $path
 
 svn checkout -q https://svn.ssec.wisc.edu/repos/cloud_team_clavrx/trunk ./
 
-svn checkout -q https://svn.ssec.wisc.edu/repos/cloud_team_cmask 
+
 
 
 cd dcomp
