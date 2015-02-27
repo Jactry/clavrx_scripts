@@ -160,7 +160,9 @@ fi
 
 
 cd $path
- 
+[ ! -d $hour0 ] && mkdir -v -p $hour0
+cd $hour0 
+
 #sh -c './peate_downloader.sh '$year'-'$month'-'$day'+'$hour0':00:00 '$year'-'$month'-'$day'+'$hour0':59:59 '$files_srch
 #---------- search data and create a script to download                                                                                                             
 OUTPUT='wget'

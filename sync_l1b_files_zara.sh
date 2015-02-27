@@ -4,7 +4,7 @@ start()
 {
 #  echo "Check files again"
 
-sch_path=$l1b_path$file_type'*'
+sch_path=$l1b_path'*'$file_type'*'
 num_real_files=`ls -1 $sch_path | wc -l`
 echo "Real $num_real_files"
 
@@ -23,9 +23,14 @@ return $stat
 
 args=("$@") 
 l1b_path=${args[0]}
-file_type=${args[1]}
+hr_path=${args[1]}
+file_type=${args[2]}
+
+
+l1b_path=$l1b_path'/'$hr_path'/'
 down_file=$l1b_path'downloader.sh'
 curr_dir=`pwd`
+#echo $l1b_path
 #echo $down_file
 
 tmp=`grep "files" $down_file`
@@ -45,6 +50,8 @@ do
    start
 done
 
+mv $l1b_path*$file_type* $l1b_path/../.
+rm -r $l1b_path
 cd $curr_dir
 echo "All files are there"
 
