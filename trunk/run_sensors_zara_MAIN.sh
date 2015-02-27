@@ -9,10 +9,10 @@
 
 # --- Set year, date, etc.
 # !!!!! ATTENTION: CODE SKIPS DAYS AND YEARS THAT ARE OUT OF A SATELLITE LIFE !!!!!
-year_start=2000
-year_end=2014 #$year_start
-doy_start=1
-doy_end=366 #$doy_start #366
+year_start=2015
+year_end=2015 #$year_start
+doy_start=47
+doy_end=$doy_start #366
 hour0=0  # 0
 hour1=23  #$hour0 #23
 day_night=''   # set for downloading 1b data: 'D' = day; 'N' = night; '' = day+night
@@ -25,14 +25,14 @@ day_night=''   # set for downloading 1b data: 'D' = day; 'N' = night; '' = day+n
 # 15 = NOAA-15 (1998,299-now);      16 = NOAA-16 (2001,001-2011,365); 17 = NOAA-17 (2002,176-2011,365); 18 = NOAA-18 (2005,200-now); 
 # 19 = NOAA-19 (2009,037-now);     
 # 20 = MOD021KM(2000,055-now);  21 = MYD021KM (2002,185-now);  22 = MOD02SSH;  23 = MYD02SSH;  30 = VIIRS (2011,325-now)
-sat_id=22
+sat_id=30
 
 # --- Set region limits
 # 0 = global;        1 = 45S - 45N;     2 = Great Lakes; 3 = South Atlantic
 # 4 = North Pacific; 5 = South Pacific; 6 = Samoa;       7 = Europe
 # 8 = USA;           9 = Brazil;        10 = Azores;     11 = China
 # 12 = Sahara;       13 = Dom-C;        14 = Greenland
-grid=4
+grid=0
 
 # --- Set flag to get and delete data
 # !!!!! ATTENTION: FOR AVHRR SET flag_get_1b_data AND flag_delete_l1b TO 0 !!!!!
@@ -188,22 +188,25 @@ fi
 if [ $sat_id == 1 ] ; then
    satname='m01'
    filetype='M1'
+   filetype2='M1'
    year_start_sat=2012
    year_end_sat=2015
    doy_start_sat=268
-   doy_end_sat=31
+   doy_end_sat=365
 fi
 if [ $sat_id == 2 ] ; then
    satname='m02'
    filetype='M2'
+   filetype2='M2'
    year_start_sat=2007
    year_end_sat=2015
    doy_start_sat=180
-   doy_end_sat=31
+   doy_end_sat=365
 fi
 if [ $sat_id == 5 ] ; then
    satname='n05'
    filetype='TN'
+   filetype2='TN'
    year_start_sat=1978
    year_end_sat=1980
    doy_start_sat=309
@@ -212,6 +215,7 @@ fi
 if [ $sat_id == 6 ] ; then
    satname='n06'
    filetype='NA'
+   filetype2='NA'
    year_start_sat=1979
    year_end_sat=1981
    doy_start_sat=181
@@ -220,6 +224,7 @@ fi
 if [ $sat_id == 7 ] ; then
    satname='n07'
    filetype='NC'
+   filetype2='NC'
    year_start_sat=1981
    year_end_sat=1985
    doy_start_sat=236
@@ -228,6 +233,7 @@ fi
 if [ $sat_id == 8 ] ; then
    satname='n08'
    filetype='NE'
+   filetype2='NE'
    year_start_sat=1983
    year_end_sat=1985
    doy_start_sat=136
@@ -236,6 +242,7 @@ fi
 if [ $sat_id == 9 ] ; then
    satname='n09'
    filetype='NF'
+   filetype2='NF'
    year_start_sat=1985
    year_end_sat=1988
    doy_start_sat=56
@@ -244,6 +251,7 @@ fi
 if [ $sat_id == 10 ] ; then
    satname='n10'
    filetype='NG'
+   filetype2='NG'
    year_start_sat=1986
    year_end_sat=1991
    doy_start_sat=321
@@ -252,6 +260,7 @@ fi
 if [ $sat_id == 11 ] ; then
    satname='n11'
    filetype='NH'
+   filetype2='NH'
    year_start_sat=1988
    year_end_sat=1994
    doy_start_sat=313
@@ -260,6 +269,7 @@ fi
 if [ $sat_id == 12 ] ; then
    satname='n12'
    filetype='ND'
+   filetype2='ND'
    year_start_sat=1991
    year_end_sat=1998
    doy_start_sat=259
@@ -268,6 +278,7 @@ fi
 if [ $sat_id == 13 ] ; then  # no sat, turned off
    satname='n13'
    filetype='NI'
+   filetype2='NI'
    year_start_sat=100
    year_end_sat=10
    doy_start_sat=100
@@ -276,6 +287,7 @@ fi
 if [ $sat_id == 14 ] ; then
    satname='n14'
    filetype='NJ'
+   filetype2='NJ'
    year_start_sat=1995
    year_end_sat=2002
    doy_start_sat=20
@@ -284,14 +296,16 @@ fi
 if [ $sat_id == 15 ] ; then
    satname='n15'
    filetype='NK'
+   filetype2='NK'
    year_start_sat=1998
    year_end_sat=2015
    doy_start_sat=299
-   doy_end_sat=31
+   doy_end_sat=365
 fi
 if [ $sat_id == 16 ] ; then
    satname='n16'
    filetype='NL'
+   filetype2='NL'
    year_start_sat=2001
    year_end_sat=2011
    doy_start_sat=1
@@ -300,6 +314,7 @@ fi
 if [ $sat_id == 17 ] ; then
    satname='n17'
    filetype='NM'
+   filetype2='NM'
    year_start_sat=2002
    year_end_sat=2011
    doy_start_sat=176
@@ -308,58 +323,65 @@ fi
 if [ $sat_id == 18 ] ; then
    satname='n18'
    filetype='NN'
+   filetype2='NN'
    year_start_sat=2005
    year_end_sat=2015
    doy_start_sat=200
-   doy_end_sat=31
+   doy_end_sat=365
 fi
 if [ $sat_id == 19 ] ; then
    satname='n19'
    filetype='NP'
+   filetype2='NP'
    year_start_sat=2009
    year_end_sat=2015
    doy_start_sat=37
-   doy_end_sat=31
+   doy_end_sat=365
 fi
 if [ $sat_id == 20 ] ; then
    satname='MOD021KM'
    filetype='MOD021KM'
+   filetype2='hdf'
    year_start_sat=2000
    year_end_sat=2015
    doy_start_sat=55
-   doy_end_sat=31
+   doy_end_sat=365
 fi
 if [ $sat_id == 21 ] ; then
    satname='MYD021KM'
    filetype='MYD021KM'
+   filetype2='hdf'
    year_start_sat=2002
    year_end_sat=2015
    doy_start_sat=185
-   doy_end_sat=31
+   doy_end_sat=365
 fi
 if [ $sat_id == 22 ] ; then
    satname='MOD02SSH'
    filetype='MOD02SSH'
+   filetype2='hdf'
    year_start_sat=2000
    year_end_sat=2015
    doy_start_sat=55
-   doy_end_sat=31
+   doy_end_sat=365
 fi
 if [ $sat_id == 23 ] ; then
    satname='MYD02SSH'
    filetype='MYD02SSH'
+   filetype2='hdf'
    year_start_sat=2002
    year_end_sat=2015
    doy_start_sat=185
-   doy_end_sat=31
+   doy_end_sat=365
 fi
 if [ $sat_id == 30 ] ; then
    satname='VIIRS'
    filetype='GMTCO'
+   filetype2='h5'
    year_start_sat=2011
    year_end_sat=2015
    doy_start_sat=325
-   doy_end_sat=31
+   doy_end_sat=365
 fi
 
 # --- loop over the years
@@ -477,7 +499,6 @@ do
            if [ $flag_make_l2 -ne 0 ] ; then
               echo "[ ! -d $tmp_work_dir/temporary_files ] && mkdir -v -p $tmp_work_dir/temporary_files" >> $tmp_script
               if [ $flag_get_1b_data -ne 0 ] ; then
-                 echo "cp $zara_files_path/peate_downloader.sh $tmp_work_dir" >> $tmp_script
                  echo "cp $zara_files_path/get_data_zara.sh $tmp_work_dir" >> $tmp_script
                  echo "cp $zara_files_path/sync_l1b_files_zara.sh $tmp_work_dir" >> $tmp_script
                  echo "[ ! -d $l1b_path ] && mkdir -v -p $l1b_path" >> $tmp_script
@@ -495,10 +516,9 @@ do
            echo "cd $tmp_work_dir" >> $tmp_script
            if [ $flag_get_1b_data -ne 0 ] ; then
               echo "echo 'Getting l1b data'" >> $tmp_script
-              echo "cp peate_downloader.sh $l1b_path" >> $tmp_script
               echo "./get_data_zara.sh $year $doy_str $hhh_str $l1b_path $satname $grid $day_night" >> $tmp_script
               echo "echo 'Making sure all files are there, running sync_l1b_files_zara.sh'" >> $tmp_script
-              echo "./sync_l1b_files_zara.sh $l1b_path $filetype" >> $tmp_script
+              echo "./sync_l1b_files_zara.sh $l1b_path $hhh_str $filetype2" >> $tmp_script
            fi
            if [ $flag_make_l2 -ne 0 ] ; then
               echo "echo 'Writing files to the filelist'" >> $tmp_script
