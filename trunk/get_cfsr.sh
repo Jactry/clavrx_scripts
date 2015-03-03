@@ -27,14 +27,15 @@ echo 'check and/or get CFSR data from '$DAY_OBS
 
 for hhh in 00 06 12 18
 do
-  filebase='gfs.'$DAY_OBS$hhh'_F012.hdf'
-  file=$gfs_path$filebase
+  filebase='cfsr.'$DAY_OBS$hhh'_F012.hdf'
+  file=$cfsr_path$filebase
   file_bz=$file.bz2
   echo $hhh
   if [ ! -f $file ]; 
   then
    echo 'download the data ....'
-   sh -c 'scp -p -r thor.ssec.wisc.edu:/data1/Ancil_Data/cfsr/hdf/gfs.'$DAY_OBS$hhh'_F012.hdf* '$gfs_path
+   echo 'scp -p -r saga.ssec.wisc.edu:/fjord/jgs/patmosx/Ancil_Data/cfsr/hdf_05/'${year}'/cfsr.'$DAY_OBS$hhh'_F006.hdf* '
+   sh -c 'scp -p -r saga.ssec.wisc.edu:/fjord/jgs/patmosx/Ancil_Data/cfsr/hdf_05/'${year}'/cfsr.'$DAY_OBS$hhh'_F006.hdf* '$cfsr_path
    [  -f $file_bz ] &&  sh -c 'bunzip2 -v '$file'.bz2' || echo 'all clear'
    
   fi
@@ -68,7 +69,7 @@ do
   if [ ! -f $file ]; 
   then
   echo 'download the data ....'$DAY_OBS$hhh'_F012.hdf* '$gfs_path
-   sh -c 'scp -p -r thor.ssec.wisc.edu:/data1/Ancil_Data/gfs/hdf/gfs.'$DAY_OBS$hhh'_F012.hdf* '$gfs_path
+   sh -c 'scp -p -r thor.ssec.wisc.edu:/data1/Ancil_Data/gfs/hdf/gfs.'$DAY_OBS$hhh'_F012.hdf* '$cfsr_path
    [  -f $file_bz ] &&  sh -c 'bunzip2 -v '$file'.bz2' || echo 'done ...'
    
   fi

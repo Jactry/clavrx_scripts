@@ -13,7 +13,7 @@ gfs_path='/data/Ancil_Data/gfs/'
  if date -v 1d > /dev/null 2>&1; then
   doy_dum=`expr ${doy} - 1` 
  
-  DAY_OBS=$(./shift_date.sh ${year}0101 +${doy_dum})
+  DAY_OBS=$( shift_date.sh ${year}0101 +${doy_dum})
   DAY_OBS=${DAY_OBS:2}
 else
   
