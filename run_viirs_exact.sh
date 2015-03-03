@@ -18,7 +18,7 @@ algo_path="main_src/"
 cd $algo_path
 cd ./../
 pwd
-options='clavrx_options'
+options='clavrxorb_default_options'
 l1b_path=$HOME'/Satellite_Input/'$satname'/'$year'/'$doy'/'
 out_path=$HOME'/Satellite_Output/'$satname'/'$year'/'$doy'/'
 [ ! -d $l1b_path ] && mkdir -v -p $l1b_path
