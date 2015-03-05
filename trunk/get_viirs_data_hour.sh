@@ -10,7 +10,7 @@ path=${args[3]}
  if date -v 1d > /dev/null 2>&1; then
   doy_dum=`expr ${doy} - 1` 
 
-  DAY_OBS=$(./shift_date.sh ${year}0101 +${doy_dum})
+  DAY_OBS=$( shift_date.sh ${year}0101 +${doy_dum})
   month=${DAY_OBS:4:2}
   day=${DAY_OBS:6:2}
 else
