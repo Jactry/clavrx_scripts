@@ -1,5 +1,5 @@
 #!/bin/sh
-# $Id:
+# $Id:$
 #   day_night should emoty for all 
 # --- Main program
 
@@ -14,6 +14,13 @@ Usage:
 > cg_get_modis_data.sh <yyyy> <doy> <h0> <path> <sensor> <grid> <day_night>
 
 ask denis.botambekov@ssec.wisc.edu or andi.walther@ssec.wisc.edu 
+
+Sensor choises so far:
+   VIIRS
+   MYDO2SSH
+   MODO2SSH
+   MYDO21KM
+   MODO21KM
 
 Grid choises:
 
