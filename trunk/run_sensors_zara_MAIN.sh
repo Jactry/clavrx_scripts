@@ -499,7 +499,7 @@ do
            if [ $flag_make_l2 -ne 0 ] ; then
               echo "[ ! -d $tmp_work_dir/temporary_files ] && mkdir -v -p $tmp_work_dir/temporary_files" >> $tmp_script
               if [ $flag_get_1b_data -ne 0 ] ; then
-                 echo "cp $zara_files_path/get_data_zara.sh $tmp_work_dir" >> $tmp_script
+                 echo "cp $zara_files_path/cg_get_data_sips.sh $tmp_work_dir" >> $tmp_script
                  echo "cp $zara_files_path/sync_l1b_files_zara.sh $tmp_work_dir" >> $tmp_script
                  echo "[ ! -d $l1b_path ] && mkdir -v -p $l1b_path" >> $tmp_script
               fi
@@ -516,7 +516,7 @@ do
            echo "cd $tmp_work_dir" >> $tmp_script
            if [ $flag_get_1b_data -ne 0 ] ; then
               echo "echo 'Getting l1b data'" >> $tmp_script
-              echo "./get_data_zara.sh $year $doy_str $hhh_str $l1b_path $satname $grid $day_night" >> $tmp_script
+              echo "./cg_get_sips.sh $year $doy_str $hhh_str $l1b_path $satname $grid $day_night" >> $tmp_script
               echo "echo 'Making sure all files are there, running sync_l1b_files_zara.sh'" >> $tmp_script
               echo "./sync_l1b_files_zara.sh $l1b_path $hhh_str $filetype2" >> $tmp_script
            fi
