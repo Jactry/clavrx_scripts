@@ -74,7 +74,7 @@ day_night=${args[6]}
 START=$year'-'$doy'+'$hour0':00:00'
 END=$year'-'$doy'+'$hour0':59:59'
 
-echo "IN get_data_zara.sh Searching $sensor, from $START to $END"
+echo "IN cg_get_data_sips.sh Searching $sensor, from $START to $END"
 
 # --- find out which sensor to download
 if [[ $sensor == "VIIRS" ]] ; then
