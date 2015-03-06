@@ -6,10 +6,12 @@ function usage() {
 
 cat<< EOF
 
-CG_GET_VIIRS_DATA
+CG_GET_VIIRS_DATA HELP
 
-need help? bad luck,  sorry!
+This tools downloads MODIS data
+Usage:
 > cg_get_modis_data.sh <yyyydoy> <hh>
+
 ask denis.botambekov@ssec.wisc.edu or andi.walther@ssec.wisc.edu 
 
 EOF
@@ -41,9 +43,12 @@ return $stat
 #this is needed because peate scripts sometimes doesn't download all files
 function check_download() {
 args=("$@") 
+
 l1b_path=${args[0]}
 down_file=$l1b_path'/downloader.sh'
 curr_dir=`pwd`
+
+
 
 tmp=`grep "files" $down_file`
 
@@ -72,6 +77,7 @@ echo "All files are there"
 }
 
 
+
 satname='modis_andi/'
 
 BASE_PATH=$HOME"/Satellite_Input/"$satname"/"
@@ -94,6 +100,11 @@ while :; do
          continue
       fi
    ;;   
+   
+   --help)
+   usage
+   exit
+   ;;
       *)
       break
    esac
@@ -137,7 +148,7 @@ fi
 
 if date -v 1d > /dev/null 2>&1; then
   doy_dum=`expr ${DOY} - 1` 
-  DAY_OBS=$(./shift_date.sh ${YEAR}0101 +${doy_dum})
+  DAY_OBS=$( shift_date.sh ${YEAR}0101 +${doy_dum})
   MONTH=${DAY_OBS:4:2}
   DAY=${DAY_OBS:6:2}
   
@@ -225,4 +236,4 @@ echo $L1B_PATH
 
       sh -c 'cg_peate_downloader.sh --path '$L1B_PATH' --ll '$ll_lat' '$ll_lon' --ur '$ur_lat' '$ur_lon' '$YEAR'-'$MONTH'-'$DAY'+'$HOUR0':'$MINU0':00 '$YEAR'-'$MONTH'-'$DAY'+'$HOUR1':'$MINU1':00 MYD03.006 MYD021KM.006 MOD03 MOD021KM'
 
-check_download $L1B_PATH
+#check_download $L1B_PATH
