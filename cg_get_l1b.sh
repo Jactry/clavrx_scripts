@@ -1,7 +1,59 @@
 #!/bin/sh
 # $Id:
-
+#   day_night should emoty for all 
 # --- Main program
+
+function usage() {
+
+cat<< EOF
+
+CG_GET_VIIRS_DATA HELP
+
+This tools downloads MODIS data
+Usage:
+> cg_get_modis_data.sh <yyyy> <doy> <h0> <path> <sensor> <grid> <day_night>
+
+ask denis.botambekov@ssec.wisc.edu or andi.walther@ssec.wisc.edu 
+
+Grid choises:
+
+ 0 = global;        1 = 45S - 45N;     2 = Great Lakes; 3 = South Atlantic
+ 4 = North Pacific; 5 = South Pacific; 6 = Samoa;       7 = Europe
+ 8 = USA;           9 = Brazil;        10 = Azores;     11 = China
+ 12 = Sahara;       13 = Dom-C;        14 = Greenland
+
+EOF
+
+}
+
+while :; do 
+   case $1 in
+   
+
+   --path)
+      if [ "$2" ]; then
+         L1B_PATH=$2
+         shift 2
+         continue
+      fi
+   ;;   
+   
+   --help)
+   usage
+   exit
+   ;;
+      -h)
+   usage
+   exit
+   ;;
+   
+      *)
+      break
+   esac
+done
+
+
+
 args=("$@") 
 year=${args[0]} 
 doy=${args[1]}
@@ -11,11 +63,9 @@ sensor=${args[4]}
 grid=${args[5]}
 day_night=${args[6]}
 
-month=$(date -d "01/01/${year} +${doy} days -1 day" "+%m")
-day=$(date -d "01/01/${year} +${doy} days -1 day" "+%d")
 
-START=$year'-'$month'-'$day'+'$hour0':00:00'
-END=$year'-'$month'-'$day'+'$hour0':59:59'
+START=$year'-'$doy'+'$hour0':00:00'
+END=$year'-'$doy'+'$hour0':59:59'
 
 echo "IN get_data_zara.sh Searching $sensor, from $START to $END"
 
@@ -169,12 +219,12 @@ OUTPUT='wget'
 XARGS=1
 if [ $box == 0 ] ;then
    if [ $grid == 0 ] ; then
-      URL="http://peate.ssec.wisc.edu/flo/api/find?start=$START&end=$END&output=$OUTPUT&xargs=$XARGS&loc=&radius=$rad&tod=$day_night"                  
+      URL="http://sips.ssec.wisc.edu/flo/api/find?start=$START&end=$END&output=$OUTPUT&xargs=$XARGS&loc=&radius=$rad&tod=$day_night"                  
    else
-      URL="http://peate.ssec.wisc.edu/flo/api/find?start=$START&end=$END&output=$OUTPUT&xargs=$XARGS&loc=$loc_lat%2C$loc_lon&radius=$rad&tod=$day_night"                  
+      URL="http://sips.ssec.wisc.edu/flo/api/find?start=$START&end=$END&output=$OUTPUT&xargs=$XARGS&loc=$loc_lat%2C$loc_lon&radius=$rad&tod=$day_night"                  
    fi
 else
-   URL="http://peate.ssec.wisc.edu/flo/api/find?start=$START&end=$END&output=$OUTPUT&xargs=$XARGS&ll=$lat_min%2C$lon_min&ur=$lat_max%2C$lon_max&tod=$day_night"        
+   URL="http://sips.ssec.wisc.edu/flo/api/find?start=$START&end=$END&output=$OUTPUT&xargs=$XARGS&ll=$lat_min%2C$lon_min&ur=$lat_max%2C$lon_max&tod=$day_night"        
 fi
 
 for ft in $files_srch; do
