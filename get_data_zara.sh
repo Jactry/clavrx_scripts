@@ -11,7 +11,7 @@ CG_GET_VIIRS_DATA HELP
 
 This tools downloads MODIS data
 Usage:
-> cg_get_data_sips.sh <yyyy> <doy> <h0> <path> <sensor> <grid> <day_night>
+> cg_get_modis_data.sh <yyyy> <doy> <h0> <path> <sensor> <grid> <day_night>
 
 ask denis.botambekov@ssec.wisc.edu or andi.walther@ssec.wisc.edu 
 
@@ -74,7 +74,7 @@ day_night=${args[6]}
 START=$year'-'$doy'+'$hour0':00:00'
 END=$year'-'$doy'+'$hour0':59:59'
 
-echo "IN cg_get_data_sips.sh Searching $sensor, from $START to $END"
+echo "IN get_data_zara.sh Searching $sensor, from $START to $END"
 
 # --- find out which sensor to download
 if [[ $sensor == "VIIRS" ]] ; then
@@ -98,7 +98,7 @@ fi
 # 0 = global;        1 = 45S - 45N;     2 = Great Lakes; 3 = South Atlantic
 # 4 = North Pacific; 5 = South Pacific; 6 = Samoa;       7 = Europe
 # 8 = USA;           9 = Brazil;        10 = Azores;     11 = China
-# 12 = Sahara;       13 = Dom-C;        14 = Greenland   15 = Alaska
+# 12 = Sahara;       13 = Dom-C;        14 = Greenland
 box=0
 # global
 if [ $grid == 0 ] ; then
@@ -215,14 +215,6 @@ if [ $grid == 14 ] ; then
    lon_max=-25
 fi
 
-# Greenland
-if [ $grid == 15 ] ; then
-   box=1
-   lat_min=43
-   lat_max=80
-   lon_min=-179
-   lon_max=-120
-fi
 
 cd $path
 [ ! -d $hour0 ] && mkdir -v -p $hour0
