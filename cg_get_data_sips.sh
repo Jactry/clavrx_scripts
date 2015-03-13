@@ -225,8 +225,8 @@ if [ $grid == 15 ] ; then
 fi
 
 cd $path
-[ ! -d $hour0 ] && mkdir -v -p $hour0
-cd $hour0 
+[ ! -d $hour0 ] && hhh_2d=`echo $hour0 | awk '{printf ("%02i", $1)}'` && mkdir -v -p $hhh_2d
+cd $hhh_2d 
 
 #sh -c './peate_downloader.sh '$year'-'$month'-'$day'+'$hour0':00:00 '$year'-'$month'-'$day'+'$hour0':59:59 '$files_srch
 #---------- search data and create a script to download                                                                                                             
