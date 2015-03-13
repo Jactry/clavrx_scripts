@@ -7,7 +7,7 @@ doy=${args[1]}
 
 
 #gfs_path='/data/Ancil_Data/gfs/'$year'/'
-cfsr_path='/data/Ancil_Data/cfsr/'
+cfsr_path='/data/Ancil_Data/cfsr/'$year'/'
  [ ! -d $gfs_path ] && mkdir -p -v $cfsr_path
  
  if date -v 1d > /dev/null 2>&1; then

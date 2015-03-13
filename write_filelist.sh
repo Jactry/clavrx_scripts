@@ -9,8 +9,9 @@ output_path_local=${args[1]}
 
 
 echo 'local level1b path: '$dir_1b_local
+
 echo
-mkdir -p output_path_local
+mkdir -p $output_path_local
 
 dir_1bx=$dir_1b_local
 dir_level2=$output_path_local
