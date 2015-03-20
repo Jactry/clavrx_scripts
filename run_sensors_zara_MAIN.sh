@@ -541,7 +541,7 @@ do
            echo "rm $tmp_script" >> $tmp_script
 
            # --- Submit job to zara for downloading level 1b data and/or process level 2 and save IDs for the future
-           jobID_tmp=`qsub -q $qsub_node -l vf=4G -S /bin/bash -l matlab=0 -l friendly=1 -p -200 -o $logs_path -e $logs_path -l h_rt=10:00:00 $tmp_script`
+           jobID_tmp=`qsub -q $qsub_node -l vf=4G -S /bin/bash -l matlab=0 -l friendly=1 -p -200 -o $logs_path -e $logs_path -l h_rt=12:00:00 $tmp_script`
            echo $jobID_tmp
            jobID[$hhh]=`echo $jobID_tmp | awk 'match($0,/[0-9]+/){print substr($0, RSTART, RLENGTH)}'`
          fi
@@ -586,9 +586,9 @@ do
          # --- Submit job to zara for processing level 2b
          cd $work_dir
          if [ $flag_make_l2 -ne 0 ] ; then
-            qsub -q $qsub_node -l vf=4G -S /bin/bash -l matlab=0 -l friendly=1 -p -200 -o $logs_path -e $logs_path -l h_rt=06:00:00 -hold_jid ${jobID_com[@]} $tmp_script_l2b_2
+            qsub -q $qsub_node -l vf=4G -S /bin/bash -l matlab=0 -l friendly=1 -p -200 -o $logs_path -e $logs_path -l h_rt=12:00:00 -hold_jid ${jobID_com[@]} $tmp_script_l2b_2
          else
-            qsub -q $qsub_node -l vf=4G -S /bin/bash -l matlab=0 -l friendly=1 -p -200 -o $logs_path -e $logs_path -l h_rt=06:00:00 $tmp_script_l2b_2
+            qsub -q $qsub_node -l vf=4G -S /bin/bash -l matlab=0 -l friendly=1 -p -200 -o $logs_path -e $logs_path -l h_rt=12:00:00 $tmp_script_l2b_2
          fi
             
       fi
