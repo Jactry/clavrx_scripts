@@ -10,15 +10,16 @@
 
 set -e
 
-hdf5_path="/opt/hdf5-1.8.8-intel"
-hdf4_path="/usr/local/hdf4"
+#hdf5_path="/opt/hdf5-1.8.8-intel"
+#hdf4_path="/usr/local/hdf4"
 
 # for convinience: symbol link to local directory
 # I encourage everybody to do this on all machines
 # ln -s <hdf4_path> ~/lib/hdf4
 # ln -s <hdf5_path> ~/lib/hdf5
-hdf5_path=$HOME"/lib/hdf5/"
-hdf4_path=$HOME"/lib/hdf4/"
+hdf5_path=$HOME"/lib/hdf5_gcc/"
+hdf4_path=$HOME"/lib/hdf4_gcc/"
+netcdf_path=$HOME"/lib/netcdf3_gcc/"
 
 path='clavrx_trunk'
 if [ -n "$1" ]
@@ -57,6 +58,8 @@ cd $path
 
 svn checkout -q https://svn.ssec.wisc.edu/repos/cloud_team_clavrx/trunk ./
 
+svn checkout -q https://svn.ssec.wisc.edu/repos/cloud_team_cmask 
+
 
 cd dcomp
 ./configure -hdf5root=$hdf5_path -with-gfortran -hdflib=${hdf4_path}/lib
@@ -67,7 +70,7 @@ cd ../nlcomp
 
 cd ../main_src
 cp level2_all_on.inc level2.inc
-./configure -hdf5root=$hdf5_path -with-gfortran  -hdflib=${hdf4_path}/lib -hdfinc=${hdf4_path}/include -nlcomp_dir=../nlcomp/ -dcomp_dir=../dcomp/ -acha_dir=../cloud_acha/
+./configure -hdf5root=$hdf5_path -with-gfortran  -hdflib=${hdf4_path}/lib -hdfinc=${hdf4_path}/include -netcdflib=${netcdf_path} -nlcomp_dir=../nlcomp/ -dcomp_dir=../dcomp/ -acha_dir=../cloud_acha/
 
 
 
