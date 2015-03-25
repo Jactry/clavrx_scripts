@@ -20,8 +20,10 @@ hdf4_path="/usr/local/hdf4"
 # ln -s <hdf5_path> ~/lib/hdf5
 hdf5_path=$HOME"/lib/hdf5/"
 hdf4_path=$HOME"/lib/hdf4/"
+netcdf_path=$HOME"/lib/netcdf3/"
 
-stable_version='clavrx_stable_54'
+
+stable_version='clavrx_stable'
 
 path=$stable_version
 if [ -n "$1" ]
@@ -52,7 +54,7 @@ echo
 mkdir -p  $path
 cd $path
 
-svn checkout -q https://svn.ssec.wisc.edu/repos/cloud_team_clavrx/tags/clavrx_current ./
+svn checkout -q https://svn.ssec.wisc.edu/repos/cloud_team_clavrx/tags/stable_release_2015a ./
 
 
 cd dcomp
@@ -64,7 +66,7 @@ cd ../nlcomp
 
 cd ../main_src
 cp level2_all_on.inc level2.inc
-./configure -hdf5root=$hdf5_path -with-ifort  -hdflib=${hdf4_path}/lib -hdfinc=${hdf4_path}/include -nlcomp_dir=../nlcomp/ -dcomp_dir=../dcomp/ -acha_dir=../cloud_acha/
+./configure -hdf5root=$hdf5_path -with-ifort  -hdflib=${hdf4_path}/lib -hdfinc=${hdf4_path}/include -netcdflib=${netcdf_path} -nlcomp_dir=../nlcomp/ -dcomp_dir=../dcomp/ -acha_dir=../cloud_acha/
 
 
 
