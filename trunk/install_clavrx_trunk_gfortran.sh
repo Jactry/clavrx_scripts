@@ -58,9 +58,6 @@ cd $path
 
 svn checkout -q https://svn.ssec.wisc.edu/repos/cloud_team_clavrx/trunk ./
 
-svn checkout -q https://svn.ssec.wisc.edu/repos/cloud_team_cmask 
-
-
 cd dcomp
 ./configure -hdf5root=$hdf5_path -with-gfortran -hdflib=${hdf4_path}/lib
 
