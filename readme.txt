@@ -1,4 +1,4 @@
-$Id:$
+$Id$
 
 
 clavrx _scripts

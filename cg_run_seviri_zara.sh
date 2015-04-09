@@ -1,5 +1,5 @@
 #!/bin/sh
-# $Id:$
+# $Id$
 
 
 # makes hourly jobs stored in temporary shell scripts 
