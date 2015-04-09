@@ -1,5 +1,5 @@
    #!/bin/sh
-# $Id: write_filelist.sh,v 1.4 2012/07/03 22:53:54 awalther Exp $
+# $Id$
 
 args=("$@") 
 dir_1b_local=${args[0]} 

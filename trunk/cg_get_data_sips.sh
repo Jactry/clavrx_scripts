@@ -1,5 +1,5 @@
 #!/bin/sh
-# $Id:$
+# $Id$
 #   day_night should emoty for all 
 # --- Main program
 
