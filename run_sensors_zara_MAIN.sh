@@ -11,8 +11,8 @@
 # !!!!! ATTENTION: CODE SKIPS DAYS AND YEARS THAT ARE OUT OF A SATELLITE LIFE !!!!!
 year_start=2015
 year_end=2015 #$year_start
-doy_start=47
-doy_end=$doy_start #366
+doy_start=91
+doy_end=95 #$doy_start #366
 hour0=0  # 0
 hour1=23  #$hour0 #23
 day_night=''   # set for downloading 1b data: 'D' = day; 'N' = night; '' = day+night
@@ -25,18 +25,19 @@ day_night=''   # set for downloading 1b data: 'D' = day; 'N' = night; '' = day+n
 # 15 = NOAA-15 (1998,299-now);      16 = NOAA-16 (2001,001-2011,365); 17 = NOAA-17 (2002,176-2011,365); 18 = NOAA-18 (2005,200-now); 
 # 19 = NOAA-19 (2009,037-now);     
 # 20 = MOD021KM(2000,055-now);  21 = MYD021KM (2002,185-now);  22 = MOD02SSH;  23 = MYD02SSH;  30 = VIIRS (2011,325-now)
+# 41 = HIMAWARI-08 (2015,?-now)
 sat_id=30
 
 # --- Set region limits
 # 0 = global;        1 = 45S - 45N;     2 = Great Lakes; 3 = South Atlantic
 # 4 = North Pacific; 5 = South Pacific; 6 = Samoa;       7 = Europe
 # 8 = USA;           9 = Brazil;        10 = Azores;     11 = China
-# 12 = Sahara;       13 = Dom-C;        14 = Greenland
-grid=0
+# 12 = Sahara;       13 = Dom-C;        14 = Greenland;  15 = Alaska 
+grid=4
 
 # --- Set flag to get and delete data
 # !!!!! ATTENTION: FOR AVHRR SET flag_get_1b_data AND flag_delete_l1b TO 0 !!!!!
-flag_get_1b_data=0   # set to 1 if need to download data from peate
+flag_get_1b_data=1   # set to 1 if need to download data from peate
 flag_reprocess_l2_files=1   # if set to 0 it would skip already existing level2 files
 flag_make_l2=1   # if set to 1 it creats level2 files
 flag_delete_l1b=0   # if set to 1 it deletes level1b data
@@ -383,6 +384,15 @@ if [ $sat_id == 30 ] ; then
    doy_start_sat=325
    doy_end_sat=365
 fi
+if [ $sat_id == 41 ] ; then
+   satname='HIM08'
+   filetype='HS_H08'
+   filetype2='.nc'
+   year_start_sat=2015
+   year_end_sat=2015
+   doy_start_sat=082
+   doy_end_sat=365
+fi
 
 # --- loop over the years
 for (( year = $year_start; year <= $year_end; year ++ ))
@@ -470,6 +480,11 @@ do
            options='clavrxorb_default_options_viirs_zara'
            file_srch="$filetype d$year$month$day t$hhh_str1"
         fi
+        if [ $sat_id == 41 ] ; then
+           n_lines_per_seg=200
+           options='clavrxorb_default_options_ahi_zara'
+           file_srch="${filetype}_${year}${month}${day}_${hhh_str1}.*B01"
+        fi
 
         # --- set pathes
         if   [ $sat_id -ge 1 ] && [ $sat_id -le 19 ] ; then
@@ -479,6 +494,11 @@ do
            l1b_path=$l1b_path_base'/'$satname'/'$region'/'$year'/'$doy_str'/'
            out_path=$out_path_base'/'$satname'/'$region'/'$year'/'$doy_str'/'
         fi
+        if   [ $sat_id -eq 41 ] ; then
+           l1b_path='/fjord/jgs/patmosx/Satellite_Input/'$satname'/'$year'_'$doy_str'/'
+           out_path=$out_path_base'/'$satname'/'$region'/'$year'/'$doy_str'/'
+        fi
+
         l2_path=$out_path'/level2/'
         #l2_path=$out_path
 
@@ -516,7 +536,7 @@ do
            echo "cd $tmp_work_dir" >> $tmp_script
            if [ $flag_get_1b_data -ne 0 ] ; then
               echo "echo 'Getting l1b data'" >> $tmp_script
-              echo "./cg_get_sips.sh $year $doy_str $hhh_str $l1b_path $satname $grid $day_night" >> $tmp_script
+              echo "./cg_get_data_sips.sh $year $doy_str $hhh_str $l1b_path $satname $grid $day_night" >> $tmp_script
               echo "echo 'Making sure all files are there, running sync_l1b_files_zara.sh'" >> $tmp_script
               echo "./sync_l1b_files_zara.sh $l1b_path $hhh_str $filetype2" >> $tmp_script
            fi
