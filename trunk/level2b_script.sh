@@ -121,6 +121,10 @@ if [ $scid == 30 ] ;then
    satname='npp'
    satname2='npp'
 fi
+if [ $scid == 41 ] ;then
+   satname='HIM8'
+   satname2='HS_H08'
+fi
 
 # --- print some constants
 echo 'satname   ' $satname

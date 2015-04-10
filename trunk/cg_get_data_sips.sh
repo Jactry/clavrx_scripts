@@ -33,10 +33,12 @@ EOF
 
 }
 
+
+# --- Beginning of the main program
+
 while :; do 
    case $1 in
    
-
    --path)
       if [ "$2" ]; then
          L1B_PATH=$2
@@ -60,7 +62,7 @@ while :; do
 done
 
 
-
+# --- read arguments
 args=("$@") 
 year=${args[0]} 
 doy=${args[1]}
@@ -70,7 +72,7 @@ sensor=${args[4]}
 grid=${args[5]}
 day_night=${args[6]}
 
-
+# --- create start and end time stamps
 START=$year'-'$doy'+'$hour0':00:00'
 END=$year'-'$doy'+'$hour0':59:59'
 
@@ -215,7 +217,7 @@ if [ $grid == 14 ] ; then
    lon_max=-25
 fi
 
-# Greenland
+# Alaska
 if [ $grid == 15 ] ; then
    box=1
    lat_min=43
