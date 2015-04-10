@@ -4,6 +4,30 @@
 
 # makes hourly jobs stored in temporary shell scripts 
 
+function usage() {
+
+cat<< EOF
+
+CG_RUN_VIIRS_ZARA
+
+This tools downloads MODIS data
+Usage:
+> cg_run_viirs_zara.sh <yyyy> <doy0> <doy1> <region>
+
+ask denis.botambekov@ssec.wisc.edu or andi.walther@ssec.wisc.edu 
+
+
+
+Grid choises:
+
+ 0 = global;        1 = 45S - 45N;     2 = Great Lakes; 3 = South Atlantic
+ 4 = North Pacific; 5 = South Pacific; 6 = Samoa;       7 = Europe
+ 8 = USA;           9 = Brazil;        10 = Azores;     11 = China
+ 12 = Sahara;       13 = Dom-C;        14 = Greenland   15 = Alaska
+
+EOF
+
+}
 
 source /etc/bashrc
 module load bundle/basic-1
@@ -39,24 +63,25 @@ fi
 year=$1
 doy_start=$2
 doy_end=$3
+reg_idx=$4
 
 hour0=0
 hour1=23
 
 # definitions 
-satname='viirs'
+satname='VIIRS'
 data_root_path='/fjord/jgs/patmosx/'
 work_dir='/fjord/jgs/personal/awalther/patmosx_processing/scripts/'
 mkdir -p $work_dir
 
-script_path='/home/awalther/ALGO/clavrx_trunk/clavrx_scripts/'
+script_path='/home/awalther/SOFTWARE/clavrx_scripts/'
 
 logs_path='/fjord/jgs/personal/awalther/logs/'
 mkdir -p $logs_path
 
 clavrx_path='/home/awalther/ALGO/clavrx_trunk/'
-options='clavrxorb_default_options'
-filelist=$clavrx_path'clavrxorb_file_list'
+options='clavrxorb_options'
+filelist=$clavrx_path'file_list'
 
 filetype='GMTCO'
 
@@ -80,12 +105,12 @@ do
 	do
    		hhh_str=$(printf "%.2d" ${hhh} )
    		
-		l1b_path=$data_root_path'/Satellite_Input/'$satname'/'$region'/'$year'/'$doy_str'/'$hhh_str'/'
-  		out_path=$data_root_path'/Satellite_Output/'$satname'/'$region'/'$year'/'$doy_str'/'$hhh_str'/'
+		l1b_path=$data_root_path'/Satellite_Input/'$satname'/reg_'$reg_idx'/'$year'/'$doy_str'/'$hhh_str'/'
+  		out_path=$data_root_path'/Satellite_Output/'$satname'/reg_'$reg_idx'/'$year'/'$doy_str'/'$hhh_str'/'
 		
 		# !!!!!!!!! CREATE A NEW TEMP SCRIPT TO SUBMIT IT TO ZARA
-   		tmp_script=$work_dir'npp_'$year'_'$doy_str'_'$hhh_str'_'$region'_patmosx.sh'
-   		tmp_work_dir=$work_dir'npp_'$year'_'$doy_str'_'$hhh_str'_'$region
+   		tmp_script=$work_dir'npp_'$year'_'$doy_str'_'$hhh_str'_reg_'$reg_idx'_patmosx.sh'
+   		tmp_work_dir=$work_dir'npp_'$year'_'$doy_str'_'$hhh_str'_reg_'$reg_idx
 		
    		echo "#!/bin/sh" > $tmp_script
    		echo "source /etc/bashrc" >> $tmp_script
@@ -118,10 +143,11 @@ do
 
    		echo "echo 'Getting l1b data'" >> $tmp_script
    		echo "cd $tmp_work_dir" >> $tmp_script
-   		
-   		echo "./cg_get_viirs_data.sh --path $l1b_path --reg $region $year$doy_str $hhh " >> $tmp_script
+   		echo "./cg_get_data_sips.sh $year $doy_str $hhh_str $l1b_path $satname $reg_idx " >> $tmp_script
+   		#echo "./cg_get_viirs_data.sh --path $l1b_path --reg $region $year$doy_str $hhh " >> $tmp_script
    		echo "echo 'Making sure all files are there, running sync_viirs_zara.sh'" >> $tmp_script
-   		#echo "./sync_viirs_zara.sh $l1b_path" >> $tmp_script
+			filetype2='.hdf'
+   		echo "sync_l1b_files_zara.sh $l1b_path $hhh_str $filetype2" >> $tmp_script
 
    		#echo "echo 'Writing files to the filelist'" >> $tmp_script
    		echo "./write_filelist.sh $l1b_path $out_path $filetype d$year$month$day t$hhh_str" >> $tmp_script
