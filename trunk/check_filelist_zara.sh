@@ -5,7 +5,7 @@ filelist=${args[0]}
 srch_str=${args[1]}
 
 # --- read output path and file list
-out_path=`sed -n '4p' $filelist`
+out_path=`sed -n '2p' $filelist`
 files_tmp=`grep $srch_str $filelist`
 
 #echo $out_path
@@ -24,12 +24,15 @@ do
    then
       l2_file='clavrx_'${i:0:40}'.level2.hdf'
    fi
+   if [[ $srch_str == 'HS_H08' ]] ; then
+      l2_file='clavrx_'${i:3:17}'.level2.hdf'
+   fi
 
    # --- look for L2 file, if exists delete coresponding L1b filename
    #echo "looking for $out_path$l2_file"
    if [ -f "$out_path$l2_file" ]
    then
-   #   echo "$l2_file found, deleting."
+      echo "$l2_file found, deleting."
       grep -v $i $filelist > 'tmp.txt'; mv 'tmp.txt' $filelist 
    fi
 
@@ -39,6 +42,7 @@ done
 #01234567890123456789012345678901234567890123456789
 #MYD02SSH.A2014001.1000.006.2014009211230.hdf
 #clavrx_MOD02SSH.A2012001.1735.006.2012290215947.level2.hdf
+#HS_H08_20150324_2130_B01_FLDK.nc
 
 #echo END OF THE CODE
 

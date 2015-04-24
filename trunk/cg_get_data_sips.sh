@@ -77,6 +77,7 @@ START=$year'-'$doy'+'$hour0':00:00'
 END=$year'-'$doy'+'$hour0':59:59'
 
 echo "IN cg_get_data_sips.sh Searching $sensor, from $START to $END"
+echo "day_night=$day_night"
 
 # --- find out which sensor to download
 if [[ $sensor == "VIIRS" ]] ; then
@@ -229,6 +230,8 @@ fi
 cd $path
 [ ! -d $hour0 ] && hhh_2d=`echo $hour0 | awk '{printf ("%02i", $1)}'` && mkdir -v -p $hhh_2d
 cd $hhh_2d 
+echo here I am
+pwd
 
 #sh -c './peate_downloader.sh '$year'-'$month'-'$day'+'$hour0':00:00 '$year'-'$month'-'$day'+'$hour0':59:59 '$files_srch
 #---------- search data and create a script to download                                                                                                             
@@ -264,8 +267,6 @@ else
 fi
 
 #---------- add -nc to wget line                                                                                                                                    
-#mv $SCRIPT $dir_out
-#cd  $dir_out
 old_strg="-q "
 new_strg="-q -nc "
 sed "s/$old_strg/$new_strg/g" <$SCRIPT > 'tmp.txt'  # for wget

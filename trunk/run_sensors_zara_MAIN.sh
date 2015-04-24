@@ -11,8 +11,8 @@
 # !!!!! ATTENTION: CODE SKIPS DAYS AND YEARS THAT ARE OUT OF A SATELLITE LIFE !!!!!
 year_start=2015
 year_end=2015 #$year_start
-doy_start=91
-doy_end=95 #$doy_start #366
+doy_start=100
+doy_end=101 #$doy_start #366
 hour0=0  # 0
 hour1=23  #$hour0 #23
 day_night=''   # set for downloading 1b data: 'D' = day; 'N' = night; '' = day+night
@@ -26,7 +26,7 @@ day_night=''   # set for downloading 1b data: 'D' = day; 'N' = night; '' = day+n
 # 19 = NOAA-19 (2009,037-now);     
 # 20 = MOD021KM(2000,055-now);  21 = MYD021KM (2002,185-now);  22 = MOD02SSH;  23 = MYD02SSH;  30 = VIIRS (2011,325-now)
 # 41 = HIMAWARI-08 (2015,?-now)
-sat_id=30
+sat_id=19
 
 # --- Set region limits
 # 0 = global;        1 = 45S - 45N;     2 = Great Lakes; 3 = South Atlantic
@@ -37,7 +37,7 @@ grid=4
 
 # --- Set flag to get and delete data
 # !!!!! ATTENTION: FOR AVHRR SET flag_get_1b_data AND flag_delete_l1b TO 0 !!!!!
-flag_get_1b_data=1   # set to 1 if need to download data from peate
+flag_get_1b_data=0   # set to 1 if need to download data from peate
 flag_reprocess_l2_files=1   # if set to 0 it would skip already existing level2 files
 flag_make_l2=1   # if set to 1 it creats level2 files
 flag_delete_l1b=0   # if set to 1 it deletes level1b data
@@ -51,10 +51,10 @@ out_path_base='/fjord/jgs/personal/dbotambekov/Satellite_Output/'
 work_dir='/fjord/jgs/personal/dbotambekov/patmosx_processing/scripts/'
 zara_files_path='/home/dbotambekov/src_clavrx_code/zara_run/'
 logs_path='/fjord/jgs/personal/dbotambekov/patmosx_processing/logs/'
-filelist='clavrxorb_file_list'
+filelist='file_list'
 clavrx_run_file='clavrxorb_trunk'  # clavrxorb_trunk
 clavrx_l2b_run_file='comp_asc_des_level2b'
-qsub_node='all.q'   # could be 'all.q' or 'r720.q' 
+qsub_node='r720.q'   # could be 'all.q' or 'r720.q' 
 
 
 # --- !!! END USER INPUT !!!
@@ -390,7 +390,7 @@ if [ $sat_id == 41 ] ; then
    filetype2='.nc'
    year_start_sat=2015
    year_end_sat=2015
-   doy_start_sat=082
+   doy_start_sat=040
    doy_end_sat=365
 fi
 
@@ -499,6 +499,7 @@ do
            out_path=$out_path_base'/'$satname'/'$region'/'$year'/'$doy_str'/'
         fi
 
+        #l2_path=$out_path'/rtm/'
         l2_path=$out_path'/level2/'
         #l2_path=$out_path
 
