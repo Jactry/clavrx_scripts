@@ -11,9 +11,6 @@
 
 set -e
 
-hdf5_path="/opt/hdf5-1.8.8-intel"
-hdf4_path="/usr/local/hdf4"
-
 # for convinience: symbol link to local directory
 # I encourage everybody to do this on all machines
 # ln -s <hdf4_path> ~/lib/hdf4
@@ -54,7 +51,7 @@ echo
 mkdir -p  $path
 cd $path
 
-svn checkout -q https://svn.ssec.wisc.edu/repos/cloud_team_clavrx/tags/stable_release_2015a ./
+svn checkout -q https://svn.ssec.wisc.edu/repos/cloud_team_clavrx/tags/stable_release_2015b ./
 
 
 cd dcomp
