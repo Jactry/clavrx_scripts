@@ -15,9 +15,9 @@ set -e
 # I encourage everybody to do this on all machines
 # ln -s <hdf4_path> ~/lib/hdf4
 # ln -s <hdf5_path> ~/lib/hdf5
-hdf5_path=$HOME"/lib/hdf5/"
-hdf4_path=$HOME"/lib/hdf4/"
-netcdf_path=$HOME"/lib/netcdf3/"
+hdf5_path=$HOME"/lib/hdf5_gcc/"
+hdf4_path=$HOME"/lib/hdf4_gcc/"
+netcdf_path=$HOME"/lib/netcdf3_gcc/"
 
 
 stable_version='clavrx_stable'
@@ -51,19 +51,19 @@ echo
 mkdir -p  $path
 cd $path
 
-svn checkout -q https://svn.ssec.wisc.edu/repos/cloud_team_clavrx/tags/stable_release_2015b ./
+svn checkout -q https://svn.ssec.wisc.edu/repos/cloud_team_clavrx/tags/stable_release_2015c ./
 
 
 cd dcomp
-./configure -hdf5root=$hdf5_path -with-ifort -hdflib=${hdf4_path}/lib
+./configure -hdf5root=$hdf5_path -with-gfortran -hdflib=${hdf4_path}/lib
 
 
 cd ../nlcomp
-./configure -hdf5root=$hdf5_path -with-ifort -hdflib=${hdf4_path}/lib
+./configure -hdf5root=$hdf5_path -with-gfortran -hdflib=${hdf4_path}/lib
 
 cd ../main_src
 cp level2_all_on.inc level2.inc
-./configure -hdf5root=$hdf5_path -with-ifort  -hdflib=${hdf4_path}/lib -hdfinc=${hdf4_path}/include -netcdflib=${netcdf_path} -nlcomp_dir=../nlcomp/ -dcomp_dir=../dcomp/ -acha_dir=../cloud_acha/
+./configure -hdf5root=$hdf5_path -with-gfortran  -hdflib=${hdf4_path}/lib -hdfinc=${hdf4_path}/include -netcdflib=${netcdf_path} -nlcomp_dir=../nlcomp/ -dcomp_dir=../dcomp/ -acha_dir=../cloud_acha/
 
 
 
