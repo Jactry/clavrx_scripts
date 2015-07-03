@@ -34,7 +34,7 @@ do
   if [ ! -f $file ]; 
   then
    echo 'download the data ....'
-   sh -c 'scp -p -r thor.ssec.wisc.edu:/data1/Ancil_Data/gfs/hdf/gfs.'$DAY_OBS$hhh'_F012.hdf* '$gfs_path
+   sh -c 'scp -p -r saga.ssec.wisc.edu:/fjord/jgs/patmosx/Ancil_Data/gfs/hdf/gfs.'$DAY_OBS$hhh'_F012.hdf* '$gfs_path
    [  -f $file_bz ] &&  sh -c 'bunzip2 -v '$file'.bz2' || echo 'all clear'
    
   fi
