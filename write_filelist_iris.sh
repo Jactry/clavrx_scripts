@@ -1,5 +1,5 @@
 #!/bin/sh
-# $Id$
+# $Id: write_filelist_iris.sh 83 2015-04-09 20:30:46Z awalther $
 
 args=("$@") 
 dir_1b_local=${args[0]} 

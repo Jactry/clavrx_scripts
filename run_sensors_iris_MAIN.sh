@@ -470,22 +470,22 @@ do
         # --- some more constants
         if   [ $sat_id -ge 1 ] && [ $sat_id -le 19 ] ; then
            n_lines_per_seg=1000
-           options='clavrxorb_default_options_avhrr_zara'
+           options='clavrxorb_default_options_avhrr_iris'
            file_srch="NSS.GHRR.$filetype.D$year_short_str$doy_str.S$hhh_str1"
         fi
         if   [ $sat_id -ge 20 ] && [ $sat_id -le 23 ] ; then
            n_lines_per_seg=500
-           options='clavrxorb_default_options_modis_zara'
+           options='clavrxorb_default_options_modis_iris'
            file_srch="$filetype.A$year$doy_str.$hhh_str1"
         fi
         if [ $sat_id == 30 ] ; then
            n_lines_per_seg=400
-           options='clavrxorb_default_options_viirs_zara'
+           options='clavrxorb_default_options_viirs_iris'
            file_srch="$filetype d$year$month$day t$hhh_str1"
         fi
         if [ $sat_id == 41 ] ; then
            n_lines_per_seg=200
-           options='clavrxorb_default_options_ahi_zara'
+           options='clavrxorb_default_options_ahi_iris'
            file_srch="${filetype}_${year}${month}${day}_${hhh_str1}.*B01"
         fi
 
@@ -538,13 +538,13 @@ do
               echo "[ ! -d $tmp_work_dir/temporary_files ] && mkdir -v -p $tmp_work_dir/temporary_files" >> $tmp_script
               if [ $flag_get_1b_data -ne 0 ] ; then
                  echo "cp $iris_files_path/cg_get_data_sips.sh $tmp_work_dir" >> $tmp_script
-                 echo "cp $iris_files_path/sync_l1b_files_zara.sh $tmp_work_dir" >> $tmp_script
+                 echo "cp $iris_files_path/sync_l1b_files_iris.sh $tmp_work_dir" >> $tmp_script
                  echo "[ ! -d $l1b_path ] && mkdir -v -p $l1b_path" >> $tmp_script
               fi
-              echo "cp $iris_files_path/write_filelist_zara.sh $tmp_work_dir" >> $tmp_script
-#              echo "cp $iris_files_path/get_cfsr_zara.sh $tmp_work_dir" >> $tmp_script
+              echo "cp $iris_files_path/write_filelist_iris.sh $tmp_work_dir" >> $tmp_script
+#              echo "cp $iris_files_path/get_cfsr_iris.sh $tmp_work_dir" >> $tmp_script
               if [ $flag_reprocess_l2_files -eq 0 ] ; then 
-                 echo "cp $iris_files_path/check_filelist_zara.sh $tmp_work_dir" >> $tmp_script
+                 echo "cp $iris_files_path/check_filelist_iris.sh $tmp_work_dir" >> $tmp_script
               fi
               echo "cp $iris_files_path/$clavrx_run_file $tmp_work_dir" >> $tmp_script
               echo "cp $iris_files_path/$options $tmp_work_dir" >> $tmp_script
@@ -555,16 +555,16 @@ do
            if [ $flag_get_1b_data -ne 0 ] ; then
               echo "echo 'Getting l1b data'" >> $tmp_script
               echo "./cg_get_data_sips.sh $year $doy_str $hhh_str $l1b_path $satname $grid $day_night" >> $tmp_script
-              echo "echo 'Making sure all files are there, running sync_l1b_files_zara.sh'" >> $tmp_script
-              echo "./sync_l1b_files_zara.sh $l1b_path $hhh_str $filetype2" >> $tmp_script
+              echo "echo 'Making sure all files are there, running sync_l1b_files_iris.sh'" >> $tmp_script
+              echo "./sync_l1b_files_iris.sh $l1b_path $hhh_str $filetype2" >> $tmp_script
            fi
            if [ $flag_make_l2 -ne 0 ] ; then
               echo "echo 'Writing files to the filelist'" >> $tmp_script
-              echo "./write_filelist_zara.sh $l1b_path $l2_path $file_srch" >> $tmp_script
-#              echo "./get_cfsr_zara.sh $year $doy" >> $tmp_script
+              echo "./write_filelist_iris.sh $l1b_path $l2_path $file_srch" >> $tmp_script
+#              echo "./get_cfsr_iris.sh $year $doy" >> $tmp_script
               if [ $flag_reprocess_l2_files -eq 0 ] ; then
                  echo "echo 'Checking files, if already processed delete them from the filelist'" >> $tmp_script
-                 echo "./check_filelist_zara.sh $filelist $filetype" >> $tmp_script
+                 echo "./check_filelist_iris.sh $filelist $filetype" >> $tmp_script
               fi
               echo "echo 'Starting CLAVR-x'" >> $tmp_script
               echo "./$clavrx_run_file -default $options -lines_per_seg $n_lines_per_seg" >> $tmp_script
@@ -578,7 +578,7 @@ do
            fi
            echo "rm $tmp_script" >> $tmp_script
 
-           # --- Submit job to zara for downloading level 1b data and/or process level 2 and save IDs for the future
+           # --- Submit job to iris for downloading level 1b data and/or process level 2 and save IDs for the future
            jobID_tmp=`sbatch $tmp_script`
            echo $jobID_tmp
            #jobID[$hhh]=`echo $jobID_tmp | awk 'match($0, /[0-9]+/) { print substr( $0, RSTART, RLENGTH )}'`
@@ -631,7 +631,7 @@ do
          fi 
          echo "rm $tmp_script_l2b" >> $tmp_script_l2b
 
-         # --- Submit job to zara for processing level 2b
+         # --- Submit job to iris for processing level 2b
          cd $work_dir
          if [ $flag_make_l2 -ne 0 ] ; then
             #qsub -q $qsub_node -l vf=4G -S /bin/bash -l matlab=0 -l friendly=1 -p -200 -o $logs_path -e $logs_path -l h_rt=12:00:00 -hold_jid ${jobID_com[@]} $tmp_script_l2b_2
