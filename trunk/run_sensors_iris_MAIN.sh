@@ -12,11 +12,11 @@
 
 # --- Set year, date, etc.
 # !!!!! ATTENTION: CODE SKIPS DAYS AND YEARS THAT ARE OUT OF A SATELLITE LIFE !!!!!
-year_start=2015
-year_end=2015 #$year_start
-doy_start=178 #151
-doy_end=206 #$doy_start #366
-hour0=0  # 0
+year_start=2013
+year_end=2013 #$year_start
+doy_start=109 #151
+doy_end=366 #$doy_start #366
+hour0=0  #0
 hour1=23  #$hour0 #23
 day_night=''   # set for downloading 1b data: 'D' = day; 'N' = night; '' = day+night
 
@@ -40,7 +40,7 @@ grid=4
 
 # --- Set flag to get and delete data
 # !!!!! ATTENTION: FOR AVHRR SET flag_get_1b_data AND flag_delete_l1b TO 0 !!!!!
-flag_get_1b_data=1   # set to 1 if need to download data from peate
+flag_get_1b_data=0   # set to 1 if need to download data from peate
 flag_reprocess_l2_files=1   # if set to 0 it would skip already existing level2 files
 flag_make_l2=1   # if set to 1 it creats level2 files
 flag_delete_l1b=0   # if set to 1 it deletes level1b data
@@ -57,7 +57,12 @@ logs_path='/fjord/jgs/personal/dbotambekov/patmosx_processing/logs/'
 filelist='file_list'
 clavrx_run_file='clavrxorb_trunk'  # clavrxorb_trunk
 clavrx_l2b_run_file='comp_asc_des_level2b'
-qsub_node='all'   # could be 'all' or 'cirrus' 
+qsub_node='cirrus'   # could be 'all' or 'cirrus' 
+
+# --- Set how many jobs to run
+user_name='dbot'  # use not less than 4 and not more than 7 characters 
+job_max=40
+sleep_time=3
 
 
 # --- !!! END USER INPUT !!!
@@ -397,6 +402,9 @@ if [ $sat_id == 41 ] ; then
    doy_end_sat=365
 fi
 
+# --- remember current dir
+curr_dir=`pwd`
+
 # --- loop over the years
 for (( year = $year_start; year <= $year_end; year ++ ))
 do
@@ -457,6 +465,7 @@ do
      hour_tot=$[hour1-hour0+1]
      #$ -t 1-$hour_tot
 
+
      # --- Loop through the hours
      for (( hhh = $hour0; hhh <= $hour1; hhh ++ ))
      do
@@ -471,17 +480,17 @@ do
         if   [ $sat_id -ge 1 ] && [ $sat_id -le 19 ] ; then
            n_lines_per_seg=1000
            options='clavrxorb_default_options_avhrr_iris'
-           file_srch="NSS.GHRR.$filetype.D$year_short_str$doy_str.S$hhh_str1"
+           file_srch="NSS.GHRR.${filetype}.D${year_short_str}${doy_str}.S${hhh_str1}"
         fi
         if   [ $sat_id -ge 20 ] && [ $sat_id -le 23 ] ; then
            n_lines_per_seg=500
            options='clavrxorb_default_options_modis_iris'
-           file_srch="$filetype.A$year$doy_str.$hhh_str1"
+           file_srch="${filetype}.A${year}${doy_str}.${hhh_str1}"
         fi
         if [ $sat_id == 30 ] ; then
            n_lines_per_seg=400
            options='clavrxorb_default_options_viirs_iris'
-           file_srch="$filetype d$year$month$day t$hhh_str1"
+           file_srch="${filetype}_npp_d${year}${month}${day}_t${hhh_str1}"
         fi
         if [ $sat_id == 41 ] ; then
            n_lines_per_seg=200
@@ -491,22 +500,43 @@ do
 
         # --- set pathes
         if   [ $sat_id -ge 1 ] && [ $sat_id -le 19 ] ; then
-           l1b_path='/fjord/jgs/patmosx/Satellite_Input/avhrr/'$region'/'$satname'_'$year'/'
-           out_path=$out_path_base'/AVHRR/'$region'/'$year'/'$doy_str'/'
+           l1b_path="/fjord/jgs/patmosx/Satellite_Input/avhrr/${region}/${satname}_${year}/"
+           out_path="${out_path_base}/AVHRR/${region}/${year}/${doy_str}/"
         else
-           #l1b_path=$l1b_path_base'/'$satname'/'$region'/'$year'/'$doy_str'/'
-           l1b_path=$l1b_path_base'/'$satname'/'$region'/'$year'/'$doy_str'/level1b/'
-           out_path=$out_path_base'/'$satname'/'$region'/'$year'/'$doy_str'/'
+           #l1b_path="${l1b_path_base}/${satname}/${region}/${year}/${doy_str}/"
+           l1b_path="${l1b_path_base}/${satname}/${region}/${year}/${doy_str}/level1b/"
+           out_path="${out_path_base}/${satname}/${region}/${year}/${doy_str}/"
         fi
         if   [ $sat_id -eq 41 ] ; then
-           l1b_path='/fjord/jgs/patmosx/Satellite_Input/'$satname'/'$year'_'$doy_str'/'
-           out_path=$out_path_base'/'$satname'/'$region'/'$year'/'$doy_str'/'
+           l1b_path="/fjord/jgs/patmosx/Satellite_Input/${satname}/${year}_${doy_str}/"
+           out_path="${out_path_base}/${satname}/${region}/${year}/${doy_str}/"
         fi
 
         #l2_path=$out_path'/rtm/'
         l2_path=$out_path'/level2/'
         #l2_path=$out_path'/level2_dcomp2/'
         #l2_path=$out_path
+
+        # !!!!!!!!! BECAUSE IRIS CAN'T HANDLE MANY CALLS CHECK IF DATA EXISTS
+        # !!!!!!!!! IF NO DATA THEN SKIP THIS HOUR
+        if [ $flag_get_1b_data -eq 0 ] ; then   # L1b data already saved
+           num_files=`ls -l ${l1b_path}${file_srch}* | wc -l`
+           #echo num_files= $num_files
+           if [ $num_files -eq 0 ] ; then
+              echo No Level 1b Files, Go To The Next Hour!!!
+              continue
+           fi
+        fi
+        if [ $flag_get_1b_data -ne 0 ] ; then   # L1b data need to be downloaded from sips
+           cd $curr_dir
+           source ./cg_get_data_sips.sh $year $doy_str $hhh_str './' $satname $grid 1 $day_night
+           num_files=$?
+           #echo num_files= $num_files
+           if [ $num_files -eq 0 ] ; then
+              echo No Level 1b Files, Go To The Next Hour!!!
+              continue
+           fi
+        fi
 
         # !!!!!!!!! CREATE A NEW TEMP SCRIPT TO SUBMIT IT TO ZARA
         tmp_script=$work_dir$satname'_'$year'_'$doy_str'_'$hhh_str1'_'$region'_patmosx.sh'
@@ -521,7 +551,7 @@ do
            echo "#SBATCH --ntasks=1" >> $tmp_script
            echo "#SBATCH --cpus-per-task=1" >> $tmp_script
            echo "#SBATCH --output=$logs_path$satname'_'$year'_'$doy_str'_'$hhh_str1'_'$region'_patmosx.log'" >> $tmp_script
-           echo "#SBATCH --mem-per-cpu=8000" >> $tmp_script
+           echo "#SBATCH --mem-per-cpu=10000" >> $tmp_script
            # --- Load modules
            #echo "module purge" >> $tmp_script
            #echo "module load license_intel/S4 intel/14.0-2" >> $tmp_script
@@ -554,7 +584,7 @@ do
            echo "cd $tmp_work_dir" >> $tmp_script
            if [ $flag_get_1b_data -ne 0 ] ; then
               echo "echo 'Getting l1b data'" >> $tmp_script
-              echo "./cg_get_data_sips.sh $year $doy_str $hhh_str $l1b_path $satname $grid $day_night" >> $tmp_script
+              echo "./cg_get_data_sips.sh $year $doy_str $hhh_str $l1b_path $satname $grid 0 $day_night" >> $tmp_script
               echo "echo 'Making sure all files are there, running sync_l1b_files_iris.sh'" >> $tmp_script
               echo "./sync_l1b_files_iris.sh $l1b_path $hhh_str $filetype2" >> $tmp_script
            fi
@@ -585,6 +615,17 @@ do
            jobID[$hhh]=$(echo $jobID_tmp | tr -dc '[0-9]')
          fi
 
+         # --- Check how many jobs and sleep if it's max
+         n_jobs=`squeue | grep ${user_name} | wc -l`
+         if [ $n_jobs -ne 0 ] ; then
+            echo Processing $n_jobs jobs
+         fi
+         while [ $n_jobs -ge $job_max ] ; do
+            echo Too many jobs, sleeping for $sleep_time seconds
+            sleep $sleep_time
+            n_jobs=`squeue | grep ${user_name} | wc -l`
+         done
+         
       done # hours loop
 
       # --- Make Level 2b Files
