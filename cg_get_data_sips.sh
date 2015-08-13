@@ -66,18 +66,19 @@ done
 args=("$@") 
 year=${args[0]} 
 doy=${args[1]}
-hour0=${args[2]}
+hour_in=${args[2]}
 path=${args[3]}
 sensor=${args[4]}
 grid=${args[5]}
-day_night=${args[6]}
+check=${args[6]}
+day_night=${args[7]}
 
 # --- create start and end time stamps
-START=$year'-'$doy'+'$hour0':00:00'
-END=$year'-'$doy'+'$hour0':59:59'
+START=$year'-'$doy'+'$hour_in':00:00'
+END=$year'-'$doy'+'$hour_in':59:59'
 
 echo "IN cg_get_data_sips.sh Searching $sensor, from $START to $END"
-echo "day_night=$day_night"
+#echo "day_night=$day_night"
 
 # --- find out which sensor to download
 if [[ $sensor == "VIIRS" ]] ; then
@@ -228,12 +229,14 @@ if [ $grid == 15 ] ; then
 fi
 
 cd $path
-[ ! -d $hour0 ] && hhh_2d=`echo $hour0 | awk '{printf ("%02i", $1)}'` && mkdir -v -p $hhh_2d
-cd $hhh_2d 
-echo here I am
-pwd
+if [ $check -eq 0 ] ; then
+  [ ! -d $hour_in ] && hhh_2d=`echo $hour_in | awk '{printf ("%02i", $1)}'` && mkdir -v -p $hhh_2d
+  cd $hhh_2d 
+fi
+#echo here I am
+#pwd
 
-#sh -c './peate_downloader.sh '$year'-'$month'-'$day'+'$hour0':00:00 '$year'-'$month'-'$day'+'$hour0':59:59 '$files_srch
+#sh -c './peate_downloader.sh '$year'-'$month'-'$day'+'$hour_in':00:00 '$year'-'$month'-'$day'+'$hour_in':59:59 '$files_srch
 #---------- search data and create a script to download                                                                                                             
 OUTPUT='wget'
 XARGS=1
@@ -258,12 +261,23 @@ wget -q -O $SCRIPT """${URL}"""
 #curl -q -o $SCRIPT ${URL}
 echo "wget -q -O """"$SCRIPT ${URL}"""
 
-
 if [ "$?" -ne "0" ]; then
   echo "Retreiving file list failed" 
   rm $SCRIPT &> /dev/null
 else
   echo "Downloaded $SCRIPT"
+fi
+#---------- if this is just a check for files return #
+if [ $check -ne 0 ] ; then
+  files_exist=$(grep files $SCRIPT | tr -dc '[0-9]')
+  #pwd
+  #echo files_exist= $files_exist
+  rm $SCRIPT
+  if [ $files_exist -eq 0 ] ; then
+     return 0 # no files
+  else
+     return 1 # files exist
+  fi
 fi
 
 #---------- add -nc to wget line                                                                                                                                    

@@ -1,6 +1,6 @@
 /fjord/jgs/patmosx/Ancil_Data/clavrx_ancil_data_new/
 ./temporary_files/
-6   !Expert mode (0 - nothing is read below, 1 - only !E1 and lower is read, 9 - everything is read )
+9   !Expert mode (0 - nothing is read below, 1 - only !E1 and lower is read, 9 - everything is read )
 1   !E1 ALG Mask mode bayesian cloud mask (0=no, 1 = yes)
 3   !E1 ALG DCOMP
 5   !E1 ALG ACHA

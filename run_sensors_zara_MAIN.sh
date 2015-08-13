@@ -11,8 +11,8 @@
 # !!!!! ATTENTION: CODE SKIPS DAYS AND YEARS THAT ARE OUT OF A SATELLITE LIFE !!!!!
 year_start=2015
 year_end=2015 #$year_start
-doy_start=100
-doy_end=101 #$doy_start #366
+doy_start=178 #151
+doy_end=178 #$doy_start #366
 hour0=0  # 0
 hour1=23  #$hour0 #23
 day_night=''   # set for downloading 1b data: 'D' = day; 'N' = night; '' = day+night
@@ -26,7 +26,7 @@ day_night=''   # set for downloading 1b data: 'D' = day; 'N' = night; '' = day+n
 # 19 = NOAA-19 (2009,037-now);     
 # 20 = MOD021KM(2000,055-now);  21 = MYD021KM (2002,185-now);  22 = MOD02SSH;  23 = MYD02SSH;  30 = VIIRS (2011,325-now)
 # 41 = HIMAWARI-08 (2015,?-now)
-sat_id=19
+sat_id=23
 
 # --- Set region limits
 # 0 = global;        1 = 45S - 45N;     2 = Great Lakes; 3 = South Atlantic
@@ -37,7 +37,7 @@ grid=4
 
 # --- Set flag to get and delete data
 # !!!!! ATTENTION: FOR AVHRR SET flag_get_1b_data AND flag_delete_l1b TO 0 !!!!!
-flag_get_1b_data=0   # set to 1 if need to download data from peate
+flag_get_1b_data=1   # set to 1 if need to download data from peate
 flag_reprocess_l2_files=1   # if set to 0 it would skip already existing level2 files
 flag_make_l2=1   # if set to 1 it creats level2 files
 flag_delete_l1b=0   # if set to 1 it deletes level1b data
@@ -491,7 +491,8 @@ do
            l1b_path='/fjord/jgs/patmosx/Satellite_Input/avhrr/'$region'/'$satname'_'$year'/'
            out_path=$out_path_base'/AVHRR/'$region'/'$year'/'$doy_str'/'
         else
-           l1b_path=$l1b_path_base'/'$satname'/'$region'/'$year'/'$doy_str'/'
+           #l1b_path=$l1b_path_base'/'$satname'/'$region'/'$year'/'$doy_str'/'
+           l1b_path=$l1b_path_base'/'$satname'/'$region'/'$year'/'$doy_str'/level1b/'
            out_path=$out_path_base'/'$satname'/'$region'/'$year'/'$doy_str'/'
         fi
         if   [ $sat_id -eq 41 ] ; then
@@ -501,6 +502,7 @@ do
 
         #l2_path=$out_path'/rtm/'
         l2_path=$out_path'/level2/'
+        #l2_path=$out_path'/level2_dcomp2/'
         #l2_path=$out_path
 
         # !!!!!!!!! CREATE A NEW TEMP SCRIPT TO SUBMIT IT TO ZARA
@@ -579,6 +581,7 @@ do
 
          # --- set names and pathes
          l2b_path=$out_path'/level2b/'
+         #l2b_path=$out_path'/level2b_dcomp2/'
          tmp_script_l2b_2=$satname'_'$year'_'$doy_str'_'$region'_patmosx_l2b.sh'
          tmp_script_l2b=$work_dir$satname'_'$year'_'$doy_str'_'$region'_patmosx_l2b.sh'
          tmp_work_dir_l2b=$work_dir$satname'_'$year'_'$doy_str'_'$region'_l2b'
