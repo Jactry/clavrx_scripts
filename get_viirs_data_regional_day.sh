@@ -17,7 +17,7 @@ path=${args[4]}
   echo $doy_dum
   echo {01..100}
   seq -w 8 10
-  exit 1
+  
 else
   month=$(date -d "01/01/${year} +${doy} days -1 day" "+%m")
   day=$(date -d "01/01/${year} +${doy} days -1 day" "+%d")

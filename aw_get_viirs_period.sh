@@ -1,5 +1,6 @@
 #!/bin/sh
-# downloads alaska for time period
+# downloads alaska (if 15) or USA (if 8) for time period
+# $Id$
 
 args=("$@") 
 doy0=${args[0]} 
@@ -17,7 +18,7 @@ hhh_2d=`echo $hhh | awk '{printf ("%02i", $1)}'`
 echo $hhh_2d
 
 mkdir -p  ${ddd_3d}/${hhh_2d}
-cg_get_data_sips.sh 2015 $ddd $hhh ${ddd_3d} VIIRS 15 N
+cg_get_data_sips.sh 2014 $ddd $hhh ${ddd_3d} VIIRS 8 0 N
 done
 
 done
