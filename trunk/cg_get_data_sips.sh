@@ -11,7 +11,7 @@ CG_GET_VIIRS_DATA HELP
 
 This tools downloads MODIS data
 Usage:
-> cg_get_data_sips.sh <yyyy> <doy> <h0> <path> <sensor> <grid> <check> <day_night>
+> cg_get_data_sips.sh <yyyy> <doy_s> <h0> <path> <sensor> <grid> <check> <day_night>
 
 ask denis.botambekov@ssec.wisc.edu or andi.walther@ssec.wisc.edu 
 
@@ -27,7 +27,7 @@ Grid choises:
  0 = global;        1 = 45S - 45N;     2 = Great Lakes; 3 = South Atlantic
  4 = North Pacific; 5 = South Pacific; 6 = Samoa;       7 = Europe
  8 = USA;           9 = Brazil;        10 = Azores;     11 = China
- 12 = Sahara;       13 = Dom-C;        14 = Greenland
+ 12 = Sahara;       13 = Dom-C;        14 = Greenland   15 = Alaska
  
 Check: do loop until data are there 
 
@@ -67,7 +67,7 @@ done
 # --- read arguments
 args=("$@") 
 year=${args[0]} 
-doy=${args[1]}
+doy_s=${args[1]}
 hour_in=${args[2]}
 path=${args[3]}
 sensor=${args[4]}
@@ -76,8 +76,8 @@ check=${args[6]}
 day_night=${args[7]}
 
 # --- create start and end time stamps
-START=$year'-'$doy'+'$hour_in':00:00'
-END=$year'-'$doy'+'$hour_in':59:59'
+START=$year'-'$doy_s'+'$hour_in':00:00'
+END=$year'-'$doy_s'+'$hour_in':59:59'
 
 echo "IN cg_get_data_sips.sh Searching $sensor, from $START to $END"
 #echo "day_night=$day_night"
@@ -229,6 +229,15 @@ if [ $grid == 15 ] ; then
    lon_min=-179
    lon_max=-120
 fi
+
+# Tropics
+if [ $grid == 16 ] ; then
+   box=1
+   lat_min=-5
+   lat_max=25
+   lon_min=-105
+   lon_max=-75
+fi 
 
 cd $path
 if [ $check -eq 0 ] ; then

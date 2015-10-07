@@ -13,8 +13,8 @@
 # --- Set year, date, etc.
 # !!!!! ATTENTION: CODE SKIPS DAYS AND YEARS THAT ARE OUT OF A SATELLITE LIFE !!!!!
 year_start=2013
-year_end=2013 #$year_start
-doy_start=109 #151
+year_end=2014 #$year_start
+doy_start=1 #151
 doy_end=366 #$doy_start #366
 hour0=0  #0
 hour1=23  #$hour0 #23
@@ -36,16 +36,17 @@ sat_id=30
 # 4 = North Pacific; 5 = South Pacific; 6 = Samoa;       7 = Europe
 # 8 = USA;           9 = Brazil;        10 = Azores;     11 = China
 # 12 = Sahara;       13 = Dom-C;        14 = Greenland;  15 = Alaska 
-grid=4
+# 16 = Tropics
+grid=15
 
 # --- Set flag to get and delete data
 # !!!!! ATTENTION: FOR AVHRR SET flag_get_1b_data AND flag_delete_l1b TO 0 !!!!!
-flag_get_1b_data=0   # set to 1 if need to download data from peate
+flag_get_1b_data=1   # set to 1 if need to download data from peate
 flag_reprocess_l2_files=1   # if set to 0 it would skip already existing level2 files
 flag_make_l2=1   # if set to 1 it creats level2 files
 flag_delete_l1b=0   # if set to 1 it deletes level1b data
 flag_make_l2b=1   # if set to 1 it creats level2b files
-flag_delete_l2=0   # if set to 1 it deletes level2 data
+flag_delete_l2=1   # if set to 1 it deletes level2 data
 
 # --- Set pathes and files to be used
 # !!!!! ATTENTION: AVHRR DON'T NEED l1b_path_base, HARD-CODED TO THE FJORD LOCATION !!!!!
@@ -61,7 +62,7 @@ qsub_node='cirrus'   # could be 'all' or 'cirrus'
 
 # --- Set how many jobs to run
 user_name='dbot'  # use not less than 4 and not more than 7 characters 
-job_max=40
+job_max=60
 sleep_time=3
 
 
@@ -191,6 +192,22 @@ if [ $grid == 14 ] ; then
  lat_south=68.0
  lat_north=75.0
  region="greenland"
+fi
+#--- alaska
+if [ $grid == 15 ] ; then
+ lon_west=-170.0
+ lon_east=-120.0
+ lat_south=45.0
+ lat_north=75.0
+ region="alaska"
+fi
+#--- tropics
+if [ $grid == 16 ] ; then
+ lon_west=-100.05
+ lon_east=-79.95
+ lat_south=-0.05
+ lat_north=20.05
+ region="tropics"
 fi
 
 # --- set some variables depending on sensor
