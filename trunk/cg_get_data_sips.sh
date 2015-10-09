@@ -224,10 +224,10 @@ fi
 # Alaska
 if [ $grid == 15 ] ; then
    box=1
-   lat_min=43
-   lat_max=80
-   lon_min=-179
-   lon_max=-120
+   lat_min=47
+   lat_max=77
+   lon_min=-167
+   lon_max=-137
 fi
 
 # Tropics
