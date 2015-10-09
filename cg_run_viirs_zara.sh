@@ -29,9 +29,9 @@ EOF
 
 }
 
-source /etc/bashrc
-module load bundle/basic-1
-module load bundle/basic-1 hdf5
+#source /etc/bashrc
+#module load bundle/basic-1
+#module load bundle/basic-1 hdf5
 
 
 while :; do 
@@ -66,22 +66,27 @@ doy_end=$3
 reg_idx=$4
 
 hour0=0
-hour1=23
+hour1=0
 
 # definitions 
 satname='VIIRS'
 data_root_path='/fjord/jgs/patmosx/'
-work_dir='/fjord/jgs/personal/awalther/patmosx_processing/scripts/'
+work_dir='/fjord/jgs/personal/dbotambekov/patmosx_processing/scripts/'
+#work_dir='/fjord/jgs/personal/awalther/patmosx_processing/scripts/'
 mkdir -p $work_dir
 
-script_path='/home/awalther/SOFTWARE/clavrx_scripts/'
+#script_path='/home/awalther/ALGO/clavrx_trunk/clavrx_scripts/'
+script_path='/home/dbotambekov/clavrx_scripts/'
 
-logs_path='/fjord/jgs/personal/awalther/logs/'
+#logs_path='/fjord/jgs/personal/awalther/logs/'
+logs_path='/fjord/jgs/personal/dbotambekov/patmosx_processing/logs/'
 mkdir -p $logs_path
 
-clavrx_path='/home/awalther/ALGO/clavrx_trunk/'
-options='clavrxorb_options'
-filelist=$clavrx_path'file_list'
+#clavrx_path='/home/awalther/ALGO/clavrx_trunk/'
+clavrx_path='/home/dbotambekov/src_clavrx_code/src_trunk/'
+options='clavrxorb_default_options_viirs_zara'
+#options='clavrxorb_default_options'
+filelist=$clavrx_path'clavrxorb_file_list'
 
 filetype='GMTCO'
 
@@ -105,8 +110,8 @@ do
 	do
    		hhh_str=$(printf "%.2d" ${hhh} )
    		
-		l1b_path=$data_root_path'/Satellite_Input/'$satname'/reg_'$reg_idx'/'$year'/'$doy_str'/'$hhh_str'/'
-  		out_path=$data_root_path'/Satellite_Output/'$satname'/reg_'$reg_idx'/'$year'/'$doy_str'/'$hhh_str'/'
+		l1b_path=$data_root_path'/Satellite_Input/'$satname'/'$region'/'$year'/'$doy_str'/'
+  		out_path=$data_root_path'/Satellite_Output/'$satname'/'$region'/'$year'/'$doy_str'/'
 		
 		# !!!!!!!!! CREATE A NEW TEMP SCRIPT TO SUBMIT IT TO ZARA
    		tmp_script=$work_dir'npp_'$year'_'$doy_str'_'$hhh_str'_reg_'$reg_idx'_patmosx.sh'
@@ -130,7 +135,8 @@ do
  
    		echo "cp $clavrx_path/clavrx_bin/clavrxorb $tmp_work_dir" >> $tmp_script
    		echo "cp $clavrx_path/clavrx_bin/comp_asc_des_level2b $tmp_work_dir" >> $tmp_script
-   		echo "cp $clavrx_path/$options $tmp_work_dir" >> $tmp_script
+   		#echo "cp $clavrx_path/$options $tmp_work_dir" >> $tmp_script
+   		echo "cp /home/dbotambekov/src_clavrx_code/$options $tmp_work_dir" >> $tmp_script
 		
    		echo "mkdir -v -p $l1b_path" >> $tmp_script
    		echo "mkdir -v -p $out_path" >> $tmp_script
