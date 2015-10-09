@@ -29,7 +29,7 @@ day_night=''   # set for downloading 1b data: 'D' = day; 'N' = night; '' = day+n
 # 19 = NOAA-19 (2009,037-now);     
 # 20 = MOD021KM(2000,055-now);  21 = MYD021KM (2002,185-now);  22 = MOD02SSH;  23 = MYD02SSH;  30 = VIIRS (2011,325-now)
 # 41 = HIMAWARI-08 (2015,?-now)
-sat_id=30
+sat_id=19
 
 # --- Set region limits
 # 0 = global;        1 = 45S - 45N;     2 = Great Lakes; 3 = South Atlantic
@@ -37,11 +37,11 @@ sat_id=30
 # 8 = USA;           9 = Brazil;        10 = Azores;     11 = China
 # 12 = Sahara;       13 = Dom-C;        14 = Greenland;  15 = Alaska 
 # 16 = Tropics
-grid=15
+grid=16
 
 # --- Set flag to get and delete data
 # !!!!! ATTENTION: FOR AVHRR SET flag_get_1b_data AND flag_delete_l1b TO 0 !!!!!
-flag_get_1b_data=1   # set to 1 if need to download data from peate
+flag_get_1b_data=0   # set to 1 if need to download data from peate
 flag_reprocess_l2_files=1   # if set to 0 it would skip already existing level2 files
 flag_make_l2=1   # if set to 1 it creats level2 files
 flag_delete_l1b=0   # if set to 1 it deletes level1b data
@@ -187,18 +187,18 @@ if [ $grid == 13 ] ; then
 fi
 #--- greenland
 if [ $grid == 14 ] ; then
- lon_west=-45.0
- lon_east=-35.0
- lat_south=68.0
- lat_north=75.0
+ lon_west=-45.05
+ lon_east=-34.95
+ lat_south=67.95
+ lat_north=75.05
  region="greenland"
 fi
 #--- alaska
 if [ $grid == 15 ] ; then
- lon_west=-170.0
- lon_east=-120.0
- lat_south=45.0
- lat_north=75.0
+ lon_west=-162.05
+ lon_east=-141.95
+ lat_south=51.95
+ lat_north=72.05
  region="alaska"
 fi
 #--- tropics
