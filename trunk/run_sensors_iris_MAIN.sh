@@ -13,9 +13,9 @@
 # --- Set year, date, etc.
 # !!!!! ATTENTION: CODE SKIPS DAYS AND YEARS THAT ARE OUT OF A SATELLITE LIFE !!!!!
 year_start=2013
-year_end=2014 #$year_start
-doy_start=1 #151
-doy_end=366 #$doy_start #366
+year_end=2013 #$year_start
+doy_start=293 #151
+doy_end=$doy_start #276 #$doy_start #366
 hour0=0  #0
 hour1=23  #$hour0 #23
 day_night=''   # set for downloading 1b data: 'D' = day; 'N' = night; '' = day+night
@@ -29,7 +29,7 @@ day_night=''   # set for downloading 1b data: 'D' = day; 'N' = night; '' = day+n
 # 19 = NOAA-19 (2009,037-now);     
 # 20 = MOD021KM(2000,055-now);  21 = MYD021KM (2002,185-now);  22 = MOD02SSH;  23 = MYD02SSH;  30 = VIIRS (2011,325-now)
 # 41 = HIMAWARI-08 (2015,?-now)
-sat_id=19
+sat_id=30
 
 # --- Set region limits
 # 0 = global;        1 = 45S - 45N;     2 = Great Lakes; 3 = South Atlantic
@@ -37,7 +37,7 @@ sat_id=19
 # 8 = USA;           9 = Brazil;        10 = Azores;     11 = China
 # 12 = Sahara;       13 = Dom-C;        14 = Greenland;  15 = Alaska 
 # 16 = Tropics
-grid=16
+grid=0
 
 # --- Set flag to get and delete data
 # !!!!! ATTENTION: FOR AVHRR SET flag_get_1b_data AND flag_delete_l1b TO 0 !!!!!
@@ -46,12 +46,12 @@ flag_reprocess_l2_files=1   # if set to 0 it would skip already existing level2 
 flag_make_l2=1   # if set to 1 it creats level2 files
 flag_delete_l1b=0   # if set to 1 it deletes level1b data
 flag_make_l2b=1   # if set to 1 it creats level2b files
-flag_delete_l2=1   # if set to 1 it deletes level2 data
+flag_delete_l2=0   # if set to 1 it deletes level2 data
 
 # --- Set pathes and files to be used
 # !!!!! ATTENTION: AVHRR DON'T NEED l1b_path_base, HARD-CODED TO THE FJORD LOCATION !!!!!
-l1b_path_base='/fjord/jgs/personal/dbotambekov/Satellite_Input/'
-out_path_base='/fjord/jgs/personal/dbotambekov/Satellite_Output/'
+l1b_path_base='/fjord/jgs/patmosx/Satellite_Input/'
+out_path_base='/fjord/jgs/patmosx/Satellite_Output/'
 work_dir='/fjord/jgs/personal/dbotambekov/patmosx_processing/scripts/'
 iris_files_path='/home/dbotambekov/src_clavrx_code/iris_run/'
 logs_path='/fjord/jgs/personal/dbotambekov/patmosx_processing/logs/'
@@ -62,8 +62,8 @@ qsub_node='cirrus'   # could be 'all' or 'cirrus'
 
 # --- Set how many jobs to run
 user_name='dbot'  # use not less than 4 and not more than 7 characters 
-job_max=60
-sleep_time=3
+job_max=80     # maximum number of submitted jobs
+sleep_time=3   # seconds code wates when maximum jobs is riched before new check
 
 
 # --- !!! END USER INPUT !!!
@@ -581,13 +581,17 @@ do
            echo "echo 'Creating necessary dirs and copying files'" >> $tmp_script
            echo "[ ! -d $tmp_work_dir ] && mkdir -v -p $tmp_work_dir" >> $tmp_script
            echo "[ ! -d $out_path ] && mkdir -v -p $out_path" >> $tmp_script
+
+           # --- copy scripts to download l1b data
+           if [ $flag_get_1b_data -ne 0 ] ; then
+              echo "cp $iris_files_path/cg_get_data_sips.sh $tmp_work_dir" >> $tmp_script
+              echo "cp $iris_files_path/sync_l1b_files_iris.sh $tmp_work_dir" >> $tmp_script
+              echo "[ ! -d $l1b_path ] && mkdir -v -p $l1b_path" >> $tmp_script
+           fi
+
+           # --- copy scripts to make l2 data
            if [ $flag_make_l2 -ne 0 ] ; then
               echo "[ ! -d $tmp_work_dir/temporary_files ] && mkdir -v -p $tmp_work_dir/temporary_files" >> $tmp_script
-              if [ $flag_get_1b_data -ne 0 ] ; then
-                 echo "cp $iris_files_path/cg_get_data_sips.sh $tmp_work_dir" >> $tmp_script
-                 echo "cp $iris_files_path/sync_l1b_files_iris.sh $tmp_work_dir" >> $tmp_script
-                 echo "[ ! -d $l1b_path ] && mkdir -v -p $l1b_path" >> $tmp_script
-              fi
               echo "cp $iris_files_path/write_filelist_iris.sh $tmp_work_dir" >> $tmp_script
 #              echo "cp $iris_files_path/get_cfsr_iris.sh $tmp_work_dir" >> $tmp_script
               if [ $flag_reprocess_l2_files -eq 0 ] ; then 
@@ -598,13 +602,18 @@ do
               echo "[ ! -d $l2_path ] && mkdir -v -p $l2_path" >> $tmp_script
            fi
 
+           # --- go to working folder
            echo "cd $tmp_work_dir" >> $tmp_script
+
+           # --- download l1b data
            if [ $flag_get_1b_data -ne 0 ] ; then
               echo "echo 'Getting l1b data'" >> $tmp_script
               echo "./cg_get_data_sips.sh $year $doy_str $hhh_str $l1b_path $satname $grid 0 $day_night" >> $tmp_script
               echo "echo 'Making sure all files are there, running sync_l1b_files_iris.sh'" >> $tmp_script
               echo "./sync_l1b_files_iris.sh $l1b_path $hhh_str $filetype2" >> $tmp_script
            fi
+
+           # --- make l2 data
            if [ $flag_make_l2 -ne 0 ] ; then
               echo "echo 'Writing files to the filelist'" >> $tmp_script
               echo "./write_filelist_iris.sh $l1b_path $l2_path $file_srch" >> $tmp_script
@@ -618,6 +627,7 @@ do
               echo "echo 'Finished processing CLAVR-x'" >> $tmp_script
            fi
 
+           # --- delete all temporary data/files
            echo "echo 'Deleting All Temp Data'" >> $tmp_script
            echo "rm -rf $tmp_work_dir" >> $tmp_script
            if [ $flag_delete_l1b -ne 0 ] ; then
