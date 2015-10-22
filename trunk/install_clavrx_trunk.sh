@@ -10,8 +10,8 @@
 
 set -e
 
-hdf5_path="/opt/hdf5-1.8.8-intel"
-hdf4_path="/usr/local/hdf4"
+#hdf5_path="/opt/hdf5-1.8.8-intel"
+#hdf4_path="/usr/local/hdf4"
 
 
 # for convinience: symbol link to local directory
@@ -60,8 +60,6 @@ cd $path
 svn checkout -q https://svn.ssec.wisc.edu/repos/cloud_team_clavrx/trunk ./
 
 
-
-
 cd dcomp
 ./configure -hdf5root=$hdf5_path -with-ifort -hdf4root=${hdf4_path}
 
@@ -71,7 +69,7 @@ cd ../nlcomp
 
 cd ../main_src
 cp level2_all_on.inc level2.inc
-./configure -hdf5root=$hdf5_path -with-ifort  -hdflib=${hdf4_path}/lib -hdfinc=${hdf4_path}/include -netcdflib=${netcdf_path} -nlcomp_dir=../nlcomp/ -dcomp_dir=../dcomp/ -acha_dir=../cloud_acha/
+./configure -hdf5root=$hdf5_path -with-ifort  -hdf4root=${hdf4_path} -netcdflib=${netcdf_path} -nlcomp_dir=../nlcomp/ -dcomp_dir=../dcomp/ -acha_dir=../cloud_acha/
 
 
 
