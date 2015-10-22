@@ -68,15 +68,15 @@ svn checkout -q https://svn.ssec.wisc.edu/repos/cloud_team_clavrx/branches/${bra
 
 
 cd dcomp
-./configure -hdf5root=$hdf5_path -with-ifort -hdflib=${hdf4_path}/lib
+./configure -hdf5root=$hdf5_path -with-ifort -hdf4root=${hdf4_path}
 
 
 cd ../nlcomp
-./configure -hdf5root=$hdf5_path -with-ifort -hdflib=${hdf4_path}/lib
+./configure -hdf5root=$hdf5_path -with-ifort -hdf4root=${hdf4_path}
 
 cd ../main_src
 cp level2_all_on.inc level2.inc
-./configure -hdf5root=$hdf5_path -with-ifort  -hdflib=${hdf4_path}/lib -hdfinc=${hdf4_path}/include -nlcomp_dir=../nlcomp/ -dcomp_dir=../dcomp/ -acha_dir=../cloud_acha/ -netcdflib=${ncdf_path}
+./configure -hdf5root=$hdf5_path -with-ifort -hdf4root=${hdf4_path} -nlcomp_dir=../nlcomp/ -dcomp_dir=../dcomp/ -acha_dir=../cloud_acha/ -netcdflib=${ncdf_path}
 
 
 

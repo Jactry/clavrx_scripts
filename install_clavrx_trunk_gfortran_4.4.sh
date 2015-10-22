@@ -16,9 +16,9 @@ set -e
 # I encourage everybody to do this on all machines
 # ln -s <hdf4_path> ~/lib/hdf4
 # ln -s <hdf5_path> ~/lib/hdf5
-hdf5_path=$HOME"/lib/hdf5/"
-hdf4_path=$HOME"/lib/hdf4/"
-hdf5_path=$HOME"/lib/hdf5_gfortran/"
+hdf5_path=$HOME"/lib/hdf5_gcc/"
+hdf4_path=$HOME"/lib/hdf4_gcc/"
+#hdf5_path=$HOME"/lib/hdf5_gfortran/"
 
 
 path='clavrx_trunk'
@@ -62,15 +62,15 @@ rm -rf dcomp
 svn co -q https://svn.ssec.wisc.edu/repos/cloud_team_dcomp/branches/fortran95_framework/ ./dcomp
 
 cd dcomp
-./configure -hdf5root=$hdf5_path -with-gfortran -hdflib=${hdf4_path}/lib
+./configure -hdf5root=$hdf5_path -with-gfortran -hdf4root=${hdf4_path}
 
 
 cd ../nlcomp
-./configure -hdf5root=$hdf5_path -with-gfortran -hdflib=${hdf4_path}/lib
-
+./configure -hdf5root=$hdf5_path -with-gfortran -hdf4root=${hdf4_path}
+ 
 cd ../main_src
 cp level2_all_on.inc level2.inc
-./configure -with-gfortran  -hdflib=${hdf4_path}/lib -hdfinc=${hdf4_path}/include  -dcomp_dir=../dcomp/ -acha_dir=../cloud_acha/
+./configure -with-gfortran  -hdf4root=${hdf4_path} -dcomp_dir=../dcomp/ -acha_dir=../cloud_acha/
 
 
 
