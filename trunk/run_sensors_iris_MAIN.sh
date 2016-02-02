@@ -12,11 +12,11 @@
 
 # --- Set year, date, etc.
 # !!!!! ATTENTION: CODE SKIPS DAYS AND YEARS THAT ARE OUT OF A SATELLITE LIFE !!!!!
-year_start=2013
-year_end=2013 #$year_start
-doy_start=293 #151
-doy_end=$doy_start #276 #$doy_start #366
-hour0=0  #0
+year_start=2016
+year_end=$year_start
+doy_start=16 #151
+doy_end=16 #$doy_start #366
+hour0=0
 hour1=23  #$hour0 #23
 day_night=''   # set for downloading 1b data: 'D' = day; 'N' = night; '' = day+night
 
@@ -29,7 +29,7 @@ day_night=''   # set for downloading 1b data: 'D' = day; 'N' = night; '' = day+n
 # 19 = NOAA-19 (2009,037-now);     
 # 20 = MOD021KM(2000,055-now);  21 = MYD021KM (2002,185-now);  22 = MOD02SSH;  23 = MYD02SSH;  30 = VIIRS (2011,325-now)
 # 41 = HIMAWARI-08 (2015,?-now)
-sat_id=30
+sat_id=23
 
 # --- Set region limits
 # 0 = global;        1 = 45S - 45N;     2 = Great Lakes; 3 = South Atlantic
@@ -45,25 +45,31 @@ flag_get_1b_data=0   # set to 1 if need to download data from peate
 flag_reprocess_l2_files=1   # if set to 0 it would skip already existing level2 files
 flag_make_l2=1   # if set to 1 it creats level2 files
 flag_delete_l1b=0   # if set to 1 it deletes level1b data
-flag_make_l2b=1   # if set to 1 it creats level2b files
+flag_make_l2b=0   # if set to 1 it creats level2b files
 flag_delete_l2=0   # if set to 1 it deletes level2 data
 
 # --- Set pathes and files to be used
 # !!!!! ATTENTION: AVHRR DON'T NEED l1b_path_base, HARD-CODED TO THE FJORD LOCATION !!!!!
+add_2_path='ltm_patmosx/'
 l1b_path_base='/fjord/jgs/patmosx/Satellite_Input/'
+#l1b_path_base='/odyssey/patmosx/Satellite_Input/'
+#l1b_path_base='/odyssey/hyper/himawari/Satellite_Input/'
 out_path_base='/fjord/jgs/patmosx/Satellite_Output/'
+#out_path_base='/odyssey/hyper/himawari/Satellite_Output/'
 work_dir='/fjord/jgs/personal/dbotambekov/patmosx_processing/scripts/'
+#work_dir='/odyssey/patmosx/personal/dbotambekov/patmosx_processing/scripts/'
 iris_files_path='/home/dbotambekov/src_clavrx_code/iris_run/'
 logs_path='/fjord/jgs/personal/dbotambekov/patmosx_processing/logs/'
+#logs_path='/odyssey/patmosx/personal/dbotambekov/patmosx_processing/logs/'
 filelist='file_list'
 clavrx_run_file='clavrxorb_trunk'  # clavrxorb_trunk
 clavrx_l2b_run_file='comp_asc_des_level2b'
-qsub_node='cirrus'   # could be 'all' or 'cirrus' 
+qsub_node='all'   # could be 'all' or 'cirrus' 
 
 # --- Set how many jobs to run
 user_name='dbot'  # use not less than 4 and not more than 7 characters 
-job_max=80     # maximum number of submitted jobs
-sleep_time=3   # seconds code wates when maximum jobs is riched before new check
+job_max=50     # maximum number of submitted jobs
+sleep_time=60   # seconds code wates when maximum jobs is riched before new check
 
 
 # --- !!! END USER INPUT !!!
@@ -486,6 +492,7 @@ do
      # --- Loop through the hours
      for (( hhh = $hour0; hhh <= $hour1; hhh ++ ))
      do
+        echo "Processing $hhh Hour"
         hhh_str=$hhh
         hhh_str1=$hhh
         if [ $hhh -lt 10 ] ; then
@@ -494,45 +501,51 @@ do
         fi
 
         # --- some more constants
+        file_srch2=''
         if   [ $sat_id -ge 1 ] && [ $sat_id -le 19 ] ; then
            n_lines_per_seg=1000
            options='clavrxorb_default_options_avhrr_iris'
            file_srch="NSS.GHRR.${filetype}.D${year_short_str}${doy_str}.S${hhh_str1}"
+           del_strg=${file_srch}*
         fi
         if   [ $sat_id -ge 20 ] && [ $sat_id -le 23 ] ; then
            n_lines_per_seg=500
            options='clavrxorb_default_options_modis_iris'
            file_srch="${filetype}.A${year}${doy_str}.${hhh_str1}"
+           del_strg=*A${year}${doy_str}.${hhh_str1}*
         fi
         if [ $sat_id == 30 ] ; then
            n_lines_per_seg=400
            options='clavrxorb_default_options_viirs_iris'
            file_srch="${filetype}_npp_d${year}${month}${day}_t${hhh_str1}"
+           del_strg=*d${year}${month}${day}_t${hhh_str1}*
         fi
         if [ $sat_id == 41 ] ; then
            n_lines_per_seg=200
            options='clavrxorb_default_options_ahi_iris'
-           file_srch="${filetype}_${year}${month}${day}_${hhh_str1}.*B01"
+           file_srch="${filetype}_${year}${month}${day}_${hhh_str1}"
+           file_srch2="B01"
+           del_strg=*${year}${month}${day}_${hhh_str1}*
         fi
 
         # --- set pathes
         if   [ $sat_id -ge 1 ] && [ $sat_id -le 19 ] ; then
            l1b_path="/fjord/jgs/patmosx/Satellite_Input/avhrr/${region}/${satname}_${year}/"
-           out_path="${out_path_base}/AVHRR/${region}/${year}/${doy_str}/"
+           l2_path="${out_path_base}/AVHRR/${region}/${add_2_path}/${year}/level2/${doy_str}/"
+           l2b_path="${out_path_base}/AVHRR/${region}/${add_2_path}/${year}/level2b_daily/"
         else
-           #l1b_path="${l1b_path_base}/${satname}/${region}/${year}/${doy_str}/"
-           l1b_path="${l1b_path_base}/${satname}/${region}/${year}/${doy_str}/level1b/"
-           out_path="${out_path_base}/${satname}/${region}/${year}/${doy_str}/"
+           l1b_path="${l1b_path_base}/${satname}/${region}/${year}/${doy_str}/"
+           l2_path="${out_path_base}/${satname}/${region}/${add_2_path}/${year}/level2/${doy_str}/"
+           l2b_path="${out_path_base}/${satname}/${region}/${add_2_path}/${year}/level2b_daily/"
         fi
         if   [ $sat_id -eq 41 ] ; then
-           l1b_path="/fjord/jgs/patmosx/Satellite_Input/${satname}/${year}_${doy_str}/"
-           out_path="${out_path_base}/${satname}/${region}/${year}/${doy_str}/"
+           #l1b_path="/fjord/jgs/patmosx/Satellite_Input/${satname}/${year}_${doy_str}/"
+           l1b_path="${l1b_path_base}/${year}${month}${day}/"
+           #l2_path="${out_path_base}/${satname}/${region}/${add_2_path}/${year}/level2/${doy_str}/"
+           l2_path="${out_path_base}/${year}${month}${day}/"
+           l2b_path="${out_path_base}/${satname}/${region}/${add_2_path}/${year}/level2b_daily/"
         fi
 
-        #l2_path=$out_path'/rtm/'
-        l2_path=$out_path'/level2/'
-        #l2_path=$out_path'/level2_dcomp2/'
-        #l2_path=$out_path
 
         # !!!!!!!!! BECAUSE IRIS CAN'T HANDLE MANY CALLS CHECK IF DATA EXISTS
         # !!!!!!!!! IF NO DATA THEN SKIP THIS HOUR
@@ -564,11 +577,11 @@ do
            echo "#SBATCH --job-name=$tmp_script" >> $tmp_script
 	   echo "#SBATCH --partition=$qsub_node" >> $tmp_script
            echo "#SBATCH --share" >> $tmp_script
-           echo "#SBATCH --time=10:00:00" >> $tmp_script
+           echo "#SBATCH --time=20:00:00" >> $tmp_script
            echo "#SBATCH --ntasks=1" >> $tmp_script
            echo "#SBATCH --cpus-per-task=1" >> $tmp_script
            echo "#SBATCH --output=$logs_path$satname'_'$year'_'$doy_str'_'$hhh_str1'_'$region'_patmosx.log'" >> $tmp_script
-           echo "#SBATCH --mem-per-cpu=10000" >> $tmp_script
+           echo "#SBATCH --mem-per-cpu=50000" >> $tmp_script
            # --- Load modules
            #echo "module purge" >> $tmp_script
            #echo "module load license_intel/S4 intel/14.0-2" >> $tmp_script
@@ -580,7 +593,7 @@ do
 
            echo "echo 'Creating necessary dirs and copying files'" >> $tmp_script
            echo "[ ! -d $tmp_work_dir ] && mkdir -v -p $tmp_work_dir" >> $tmp_script
-           echo "[ ! -d $out_path ] && mkdir -v -p $out_path" >> $tmp_script
+           echo "[ ! -d $l2_path ] && mkdir -v -p $l2_path" >> $tmp_script
 
            # --- copy scripts to download l1b data
            if [ $flag_get_1b_data -ne 0 ] ; then
@@ -599,7 +612,6 @@ do
               fi
               echo "cp $iris_files_path/$clavrx_run_file $tmp_work_dir" >> $tmp_script
               echo "cp $iris_files_path/$options $tmp_work_dir" >> $tmp_script
-              echo "[ ! -d $l2_path ] && mkdir -v -p $l2_path" >> $tmp_script
            fi
 
            # --- go to working folder
@@ -616,7 +628,7 @@ do
            # --- make l2 data
            if [ $flag_make_l2 -ne 0 ] ; then
               echo "echo 'Writing files to the filelist'" >> $tmp_script
-              echo "./write_filelist_iris.sh $l1b_path $l2_path $file_srch" >> $tmp_script
+              echo "./write_filelist_iris.sh $l1b_path $l2_path $file_srch $file_srch2" >> $tmp_script
 #              echo "./get_cfsr_iris.sh $year $doy" >> $tmp_script
               if [ $flag_reprocess_l2_files -eq 0 ] ; then
                  echo "echo 'Checking files, if already processed delete them from the filelist'" >> $tmp_script
@@ -631,7 +643,7 @@ do
            echo "echo 'Deleting All Temp Data'" >> $tmp_script
            echo "rm -rf $tmp_work_dir" >> $tmp_script
            if [ $flag_delete_l1b -ne 0 ] ; then
-              echo "rm -rf $l1b_path" >> $tmp_script
+              echo "rm -rf ${l1b_path}${del_strg}" >> $tmp_script
            fi
            echo "rm $tmp_script" >> $tmp_script
 
@@ -664,8 +676,6 @@ do
          jobID_com=${jobID_com:1}
 
          # --- set names and pathes
-         l2b_path=$out_path'/level2b/'
-         #l2b_path=$out_path'/level2b_dcomp2/'
          tmp_script_l2b_2=$satname'_'$year'_'$doy_str'_'$region'_patmosx_l2b.sh'
          tmp_script_l2b=$work_dir$satname'_'$year'_'$doy_str'_'$region'_patmosx_l2b.sh'
          tmp_work_dir_l2b=$work_dir$satname'_'$year'_'$doy_str'_'$region'_l2b'
@@ -676,7 +686,7 @@ do
          echo "#SBATCH --job-name=$tmp_script_l2b" >> $tmp_script_l2b
          echo "#SBATCH --partition=$qsub_node" >> $tmp_script_l2b
          echo "#SBATCH --share" >> $tmp_script_l2b
-         echo "#SBATCH --time=10:00:00" >> $tmp_script_l2b
+         echo "#SBATCH --time=20:00:00" >> $tmp_script_l2b
          echo "#SBATCH --ntasks=1" >> $tmp_script_l2b
          echo "#SBATCH --cpus-per-task=1" >> $tmp_script_l2b
          echo "#SBATCH --output=$logs_path$tmp_script_l2b_2'.log'" >> $tmp_script_l2b

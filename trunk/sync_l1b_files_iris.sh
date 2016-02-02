@@ -39,9 +39,9 @@ tmp=`grep "files" $down_file`
 if [ -f $down_file ] ; then
   num_need_files=`echo $tmp |awk -F " " '{print $2}'`
   echo "Need $num_need_files"
-  sed -e 's/-q/-q -nc/g' <$down_file >temp.txt
-  cp temp.txt $down_file
-  rm temp.txt
+#  sed -e 's/-q/-q -nc/g' <$down_file >temp.txt
+#  cp temp.txt $down_file
+#  rm temp.txt
   stat=1
 fi
 
