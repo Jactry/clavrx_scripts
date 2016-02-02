@@ -15,7 +15,7 @@
 0   !E2 NAV nav option  (0 =  Use  level-1b,1 = external (future) 2 = Reposnx ( fred nagle): For non-AVHRR, use 0) 
 1   !E2 OUT output compression flag (0=no,1=gzip)
 0   !E2 MASK read auxilary cloud mask 1b (1 = read from 1b and don't recompute)
-ahi_default_bayes_mask.nc
+default
 1   !E3 SFC seebor emiss flag (0=no, 1=yes) 
 0   !E3 SFC read hires sfc type flag (0=no-8km, 1 = yes-1km) 
 1   !E3 SFC read land mask flag (0=no, 1=yes) (goge2_0ll.hdf)
