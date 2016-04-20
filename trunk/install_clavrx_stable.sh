@@ -51,7 +51,7 @@ echo
 mkdir -p  $path
 cd $path
 
-svn checkout -q https://svn.ssec.wisc.edu/repos/cloud_team_clavrx/tags/stable_release_2015c ./
+svn checkout -q https://svn.ssec.wisc.edu/repos/cloud_team_clavrx/tags/stable_release_2016a ./
 
 
 cd dcomp
