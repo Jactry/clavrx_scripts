@@ -5,7 +5,7 @@
 #
 #   history 20 January 2014: changed to patmosx branch of clavrx (AW)
 #            24 March 2014: for CLAVR-x stable version 
-
+# $Id$
 #source ~/.bashrc
 #export DISPLAY=:1
 
@@ -67,16 +67,12 @@ svn checkout -q https://svn.ssec.wisc.edu/repos/cloud_team_clavrx/branches/${bra
 
 
 
-cd dcomp
-./configure -hdf5root=$hdf5_path -with-ifort -hdf4root=${hdf4_path}
-
-
-cd ../nlcomp
+cd dncomp
 ./configure -hdf5root=$hdf5_path -with-ifort -hdf4root=${hdf4_path}
 
 cd ../main_src
-cp level2_all_on.inc level2.inc
-./configure -hdf5root=$hdf5_path -with-ifort -hdf4root=${hdf4_path} -nlcomp_dir=../nlcomp/ -dcomp_dir=../dcomp/ -acha_dir=../cloud_acha/ -netcdflib=${ncdf_path}
+ln -s level2_all_on.inc level2.inc
+./configure -hdf5root=$hdf5_path -with-ifort -hdf4root=${hdf4_path}  -dncomp_dir=../dncomp/ -acha_dir=../cloud_acha/ -netcdflib=${ncdf_path}
 
 
 
