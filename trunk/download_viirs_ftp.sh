@@ -1,5 +1,21 @@
 #!/bin/bash
 
+# Script to read VIIRS IDPS data from CIMSS/SSEC/UW-Madison Data Center FTP
+# !!!!! ATTENTION: THEY KEEP ONLY 30-31 DAY OF DATA FROM TODAY !!!!!
+# 
+# Author: Denis B. (denis.botambekov@ssec.wisc.edu)
+#
+# April 4th, 2015
+#
+# Example to Run:
+# ./download_viirs_ftp.sh YEAR DOY HOUR PATH
+#
+# ./download_viirs_ftp.sh 2016 172 0 /data/Satellite_Input/VIIRS/2016172
+#
+# Note: If path doesn't exist it would be created
+#
+
+
 # --- read arguments
 args=("$@")
 year=${args[0]}
@@ -13,9 +29,13 @@ day_s=$(date -d "01/01/${year} +${doy_s} days -1 day" "+%d")
 
 # --- construct search string
 srch_str="_npp_d${year}${month_s}${day_s}_t${hour_s}"
+#srch_str="_npp_d${year}${month_s}${day_s}"
 
 # --- go to level1b folder
+[ ! -d $path ] && mkdir -v -p $path
 cd $path
+echo 'Wait until all data downloads here'
+pwd
 
 # --- download from ftp
 ftp -in snpp.ssec.wisc.edu << SCRIPTEND
@@ -63,6 +83,7 @@ cd ../IICMO/
 mget IICMO${srch_str}*
 SCRIPTEND
 
+echo "DONE!"
 
 
 
