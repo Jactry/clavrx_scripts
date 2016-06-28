@@ -33,11 +33,11 @@ curr_dir=`pwd`
 #echo $l1b_path
 #echo $down_file
 
-tmp=`grep "files" $down_file`
-#echo $tmp
+tmp=`grep Results $down_file`
+#echo HERE $tmp
 
 if [ -f $down_file ] ; then
-  num_need_files=`echo $tmp |awk -F " " '{print $2}'`
+  num_need_files=`echo $tmp |awk -F " " '{print $3}'`
   echo "Need $num_need_files"
 #  sed -e 's/-q/-q -nc/g' <$down_file >temp.txt
 #  cp temp.txt $down_file
