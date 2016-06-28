@@ -17,6 +17,7 @@ ask denis.botambekov@ssec.wisc.edu or andi.walther@ssec.wisc.edu
 
 Sensor choises so far:
    VIIRS
+   VIIRS-NASA
    MYDO2SSH
    MODO2SSH
    MYDO21KM
@@ -67,37 +68,49 @@ done
 # --- read arguments
 args=("$@") 
 year=${args[0]} 
-doy_s=${args[1]}
-hour_in=${args[2]}
-path=${args[3]}
-sensor=${args[4]}
-grid=${args[5]}
-check=${args[6]}
-day_night=${args[7]}
+month_s=${args[1]}
+day_s=${args[2]}
+hour_in=${args[3]}
+path=${args[4]}
+sensor=${args[5]}
+grid=${args[6]}
+check=${args[7]}
+day_night=${args[8]}
 
 # --- create start and end time stamps
-START=$year'-'$doy_s'+'$hour_in':00:00'
-END=$year'-'$doy_s'+'$hour_in':59:59'
+START=$year'-'$month_s'-'$day_s'T'$hour_in':00:00Z'
+END=$year'-'$month_s'-'$day_s'T'$hour_in':59:59Z'
 
 echo "IN cg_get_data_sips.sh Searching $sensor, from $START to $END"
 #echo "day_night=$day_night"
 
 # --- find out which sensor to download
 if [[ $sensor == "VIIRS" ]] ; then
+   echo "!!! CAN'T PROCESS VIIRS, TRY VIIRS-NASA, STOPPING !!!"
+   exit
+   satellite='snpp'
    declare -a files_srch=('GMTCO IICMO SVM01 SVM02 SVM03 SVM04 SVM05 SVM06 SVM07 SVM08 SVM09 SVM10 SVM11 SVM12 SVM13 SVM14 SVM15 SVM16 GDNBO SVDNB');
    #declare -a  files_srch='GMTCO IICMO SVI01 SVI02 SVI05 SVM01 SVM02 SVM03 SVM04 SVM05 SVM06 SVM07 SVM08 SVM09 SVM10 SVM11 SVM12 SVM13 SVM14 SVM15 SVM16 GDNBO SVDNB'
 fi
+if [[ $sensor == "VIIRS-NASA" ]] ; then
+   satellite='snpp'
+   files_srch='VGEOM|VL1BM|VGEOD|VL1BD'
+fi
 if [[ $sensor == "MYD02SSH" ]] ; then
-   files_srch='MYD02SSH.006'
+   satellite='aqua'
+   files_srch='MYD02SSH'
 fi
 if [[ $sensor == "MOD02SSH" ]] ; then
-   files_srch='MOD02SSH.006'
+   satellite='terra'
+   files_srch='MOD02SSH'
 fi
 if [[ $sensor == "MYD021KM" ]] ; then
-   declare -a files_srch=('MYD021KM.006 MYD03.006 MYD35_L2.006')
+   satellite='aqua'
+   files_srch='MYD021KM|MYD03|MYD35_L2'
 fi
 if [[ $sensor == "MOD021KM" ]] ; then
-   declare -a files_srch=('MOD021KM.006 MOD03.006 MOD35_L2.006')
+   satellite='terra'
+   files_srch='MOD021KM|MOD03|MOD35_L2'
 fi
 
 # --- find out what region to get
@@ -249,28 +262,24 @@ fi
 
 #sh -c './peate_downloader.sh '$year'-'$month'-'$day'+'$hour_in':00:00 '$year'-'$month'-'$day'+'$hour_in':59:59 '$files_srch
 #---------- search data and create a script to download                                                                                                             
-OUTPUT='wget'
-XARGS=1
+#curl 'http://sips.ssec.wisc.edu/api/v1/products/search.sh?start=2016-04-20T15:25:00Z&end=2016-04-20T15:26:00Z&products=VGEOM|VL1BM&satellite=snpp&solar_zen=&bbox=&loc=' > downloader.sh
 if [ $box == 0 ] ;then
    if [ $grid == 0 ] ; then
-      URL="http://sips.ssec.wisc.edu/flo/api/find?start=$START&end=$END&output=$OUTPUT&xargs=$XARGS&loc=&radius=$rad&tod=$day_night"                  
+      URL="http://sips.ssec.wisc.edu/api/v1/products/search.sh?start=$START&end=$END&loc=&solar_zen=$day_night&products=$files_srch&satellite=$satellite"
    else
-      URL="http://sips.ssec.wisc.edu/flo/api/find?start=$START&end=$END&output=$OUTPUT&xargs=$XARGS&loc=$loc_lat%2C$loc_lon&radius=$rad&tod=$day_night"                  
+      URL="http://sips.ssec.wisc.edu/api/v1/products/search.sh?start=$START&end=$END&loc=$loc_lat,$loc_lon,$rad&tod=$day_night&products=$files_srch&satellite=$satellite"
    fi
 else
-   URL="http://sips.ssec.wisc.edu/flo/api/find?start=$START&end=$END&output=$OUTPUT&xargs=$XARGS&ll=$lat_min%2C$lon_min&ur=$lat_max%2C$lon_max&tod=$day_night"        
+   URL="http://sips.ssec.wisc.edu/api/v1/products/search.sh?start=$START&end=$END&bbox=$lat_max,$lon_max,$lat_min,$lon_min&tod=$day_night&products=$files_srch&satellite=$satellite"
 fi
 
-for ft in $files_srch; do
-  URL="$URL&file_type=$ft"
-done
 #echo "$URL"
 
 SCRIPT=downloader.sh
 
-wget -q -O $SCRIPT """${URL}"""
-#curl -q -o $SCRIPT ${URL}
-echo "wget -q -O """"$SCRIPT ${URL}"""
+#wget -q -O $SCRIPT """${URL}"""
+curl -s  ${URL} > $SCRIPT
+echo "curl -s ${URL} > $SCRIPT"
 
 if [ "$?" -ne "0" ]; then
   echo "Retreiving file list failed" 
@@ -280,7 +289,7 @@ else
 fi
 #---------- if this is just a check for files return #
 if [ $check -ne 0 ] ; then
-  files_exist=$(grep files $SCRIPT | tr -dc '[0-9]')
+  files_exist=$(grep Results $SCRIPT | tr -dc '[0-9]')
   #pwd
   #echo files_exist= $files_exist
   rm $SCRIPT
@@ -292,8 +301,8 @@ if [ $check -ne 0 ] ; then
 fi
 
 #---------- add -nc to wget line                                                                                                                                    
-old_strg="-q "
-new_strg="-q -nc "
+old_strg="curl -sO"
+new_strg="wget -q -nc "
 sed "s/$old_strg/$new_strg/g" <$SCRIPT > 'tmp.txt'  # for wget
 #sed -e 's/-s/-s -z "Aug 25 2014"/g' <$SCRIPT > 'tmp.txt'  # for curl
 mv 'tmp.txt' $SCRIPT

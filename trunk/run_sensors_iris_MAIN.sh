@@ -12,12 +12,12 @@
 
 # --- Set year, date, etc.
 # !!!!! ATTENTION: CODE SKIPS DAYS AND YEARS THAT ARE OUT OF A SATELLITE LIFE !!!!!
-year_start=2016
+year_start=2014
 year_end=$year_start
-doy_start=16 #151
-doy_end=16 #$doy_start #366
+doy_start=192 #151
+doy_end=$doy_start #366
 hour0=0
-hour1=23  #$hour0 #23
+hour1=23 #$hour0 #23
 day_night=''   # set for downloading 1b data: 'D' = day; 'N' = night; '' = day+night
 
 # --- Set satellite id (life time is in the parenthesis - year,doy)
@@ -27,9 +27,9 @@ day_night=''   # set for downloading 1b data: 'D' = day; 'N' = night; '' = day+n
 # 11 = NOAA-11 (1988,313-1994,289); 12 = NOAA-12 (1991,259-1998,348); 13 = NOAA-13 (-----------------); 14 = NOAA-14 (1995,020-2002,280); 
 # 15 = NOAA-15 (1998,299-now);      16 = NOAA-16 (2001,001-2011,365); 17 = NOAA-17 (2002,176-2011,365); 18 = NOAA-18 (2005,200-now); 
 # 19 = NOAA-19 (2009,037-now);     
-# 20 = MOD021KM(2000,055-now);  21 = MYD021KM (2002,185-now);  22 = MOD02SSH;  23 = MYD02SSH;  30 = VIIRS (2011,325-now)
-# 41 = HIMAWARI-08 (2015,?-now)
-sat_id=23
+# 20 = MOD021KM(2000,055-now);      21 = MYD021KM (2002,185-now);  22 = MOD02SSH;  23 = MYD02SSH;  
+# 30 = VIIRS (2011,325-now);        31 = VIIRS-NASA(2011,325-now);    41 = HIMAWARI-08 (2015,?-now)
+sat_id=31
 
 # --- Set region limits
 # 0 = global;        1 = 45S - 45N;     2 = Great Lakes; 3 = South Atlantic
@@ -41,7 +41,7 @@ grid=0
 
 # --- Set flag to get and delete data
 # !!!!! ATTENTION: FOR AVHRR SET flag_get_1b_data AND flag_delete_l1b TO 0 !!!!!
-flag_get_1b_data=0   # set to 1 if need to download data from peate
+flag_get_1b_data=1   # set to 1 if need to download data from peate
 flag_reprocess_l2_files=1   # if set to 0 it would skip already existing level2 files
 flag_make_l2=1   # if set to 1 it creats level2 files
 flag_delete_l1b=0   # if set to 1 it deletes level1b data
@@ -54,17 +54,20 @@ add_2_path='ltm_patmosx/'
 l1b_path_base='/fjord/jgs/patmosx/Satellite_Input/'
 #l1b_path_base='/odyssey/patmosx/Satellite_Input/'
 #l1b_path_base='/odyssey/hyper/himawari/Satellite_Input/'
+#l1b_path_base='/iliad/jgs/patmosx/Satellite_Input/'
 out_path_base='/fjord/jgs/patmosx/Satellite_Output/'
+#out_path_base='/odyssey/patmosx/Satellite_Output/'
 #out_path_base='/odyssey/hyper/himawari/Satellite_Output/'
+#out_path_base='/iliad/jgs/patmosx/Satellite_Output/'
 work_dir='/fjord/jgs/personal/dbotambekov/patmosx_processing/scripts/'
 #work_dir='/odyssey/patmosx/personal/dbotambekov/patmosx_processing/scripts/'
 iris_files_path='/home/dbotambekov/src_clavrx_code/iris_run/'
 logs_path='/fjord/jgs/personal/dbotambekov/patmosx_processing/logs/'
 #logs_path='/odyssey/patmosx/personal/dbotambekov/patmosx_processing/logs/'
 filelist='file_list'
-clavrx_run_file='clavrxorb_trunk'  # clavrxorb_trunk
+clavrx_run_file='clavrxorb_gfort' #'clavrxorb_v1562'  # clavrxorb_trunk
 clavrx_l2b_run_file='comp_asc_des_level2b'
-qsub_node='all'   # could be 'all' or 'cirrus' 
+qsub_node='cirrus'   # could be 'all' or 'cirrus' 
 
 # --- Set how many jobs to run
 user_name='dbot'  # use not less than 4 and not more than 7 characters 
@@ -222,7 +225,7 @@ if [ $sat_id == 1 ] ; then
    filetype='M1'
    filetype2='M1'
    year_start_sat=2012
-   year_end_sat=2015
+   year_end_sat=2016
    doy_start_sat=268
    doy_end_sat=365
 fi
@@ -231,7 +234,7 @@ if [ $sat_id == 2 ] ; then
    filetype='M2'
    filetype2='M2'
    year_start_sat=2007
-   year_end_sat=2015
+   year_end_sat=2016
    doy_start_sat=180
    doy_end_sat=365
 fi
@@ -330,7 +333,7 @@ if [ $sat_id == 15 ] ; then
    filetype='NK'
    filetype2='NK'
    year_start_sat=1998
-   year_end_sat=2015
+   year_end_sat=2016
    doy_start_sat=299
    doy_end_sat=365
 fi
@@ -357,7 +360,7 @@ if [ $sat_id == 18 ] ; then
    filetype='NN'
    filetype2='NN'
    year_start_sat=2005
-   year_end_sat=2015
+   year_end_sat=2016
    doy_start_sat=200
    doy_end_sat=365
 fi
@@ -366,7 +369,7 @@ if [ $sat_id == 19 ] ; then
    filetype='NP'
    filetype2='NP'
    year_start_sat=2009
-   year_end_sat=2015
+   year_end_sat=2016
    doy_start_sat=37
    doy_end_sat=365
 fi
@@ -375,7 +378,7 @@ if [ $sat_id == 20 ] ; then
    filetype='MOD021KM'
    filetype2='hdf'
    year_start_sat=2000
-   year_end_sat=2015
+   year_end_sat=2016
    doy_start_sat=55
    doy_end_sat=365
 fi
@@ -384,7 +387,7 @@ if [ $sat_id == 21 ] ; then
    filetype='MYD021KM'
    filetype2='hdf'
    year_start_sat=2002
-   year_end_sat=2015
+   year_end_sat=2016
    doy_start_sat=185
    doy_end_sat=365
 fi
@@ -393,7 +396,7 @@ if [ $sat_id == 22 ] ; then
    filetype='MOD02SSH'
    filetype2='hdf'
    year_start_sat=2000
-   year_end_sat=2015
+   year_end_sat=2016
    doy_start_sat=55
    doy_end_sat=365
 fi
@@ -402,7 +405,7 @@ if [ $sat_id == 23 ] ; then
    filetype='MYD02SSH'
    filetype2='hdf'
    year_start_sat=2002
-   year_end_sat=2015
+   year_end_sat=2016
    doy_start_sat=185
    doy_end_sat=365
 fi
@@ -411,7 +414,16 @@ if [ $sat_id == 30 ] ; then
    filetype='GMTCO'
    filetype2='h5'
    year_start_sat=2011
-   year_end_sat=2015
+   year_end_sat=2016
+   doy_start_sat=325
+   doy_end_sat=365
+fi
+if [ $sat_id == 31 ] ; then
+   satname='VIIRS-NASA'
+   filetype='VGEOM'
+   filetype2='nc'
+   year_start_sat=2011
+   year_end_sat=2016
    doy_start_sat=325
    doy_end_sat=365
 fi
@@ -420,7 +432,7 @@ if [ $sat_id == 41 ] ; then
    filetype='HS_H08'
    filetype2='.nc'
    year_start_sat=2015
-   year_end_sat=2015
+   year_end_sat=2016
    doy_start_sat=040
    doy_end_sat=365
 fi
@@ -433,7 +445,7 @@ for (( year = $year_start; year <= $year_end; year ++ ))
 do
    echo Thinking about Processing $satname, Year $year
    # - check if year is out of satellite's life period, skip those years
-   if [ $year -lt $year_start_sat ] && [ $year -gt $year_end_sat ] ; then
+   if [ $year -lt $year_start_sat ] || [ $year -gt $year_end_sat ] ; then
       echo Skipping $year Year, $satname Life Time is from $year_start_sat to $year_end_sat
       continue
    fi
@@ -520,6 +532,12 @@ do
            file_srch="${filetype}_npp_d${year}${month}${day}_t${hhh_str1}"
            del_strg=*d${year}${month}${day}_t${hhh_str1}*
         fi
+        if [ $sat_id == 31 ] ; then
+           n_lines_per_seg=400                                                                                                                                                      
+           options='clavrxorb_default_options_viirs_iris'                                                                                                                           
+           file_srch="${filetype}_snpp_d${year}${month}${day}_t${hhh_str1}"                                                                                                          
+           del_strg=*d${year}${month}${day}_t${hhh_str1}*                                                                                                                           
+        fi
         if [ $sat_id == 41 ] ; then
            n_lines_per_seg=200
            options='clavrxorb_default_options_ahi_iris'
@@ -539,13 +557,12 @@ do
            l2b_path="${out_path_base}/${satname}/${region}/${add_2_path}/${year}/level2b_daily/"
         fi
         if   [ $sat_id -eq 41 ] ; then
-           #l1b_path="/fjord/jgs/patmosx/Satellite_Input/${satname}/${year}_${doy_str}/"
-           l1b_path="${l1b_path_base}/${year}${month}${day}/"
+           l1b_path="/fjord/jgs/patmosx/Satellite_Input/${satname}/z${year}_${doy_str}/"
+           #l1b_path="${l1b_path_base}/${satname}/${year}${month}${day}/"
            #l2_path="${out_path_base}/${satname}/${region}/${add_2_path}/${year}/level2/${doy_str}/"
-           l2_path="${out_path_base}/${year}${month}${day}/"
+           l2_path="${out_path_base}/${satname}/${year}${month}${day}/"
            l2b_path="${out_path_base}/${satname}/${region}/${add_2_path}/${year}/level2b_daily/"
         fi
-
 
         # !!!!!!!!! BECAUSE IRIS CAN'T HANDLE MANY CALLS CHECK IF DATA EXISTS
         # !!!!!!!!! IF NO DATA THEN SKIP THIS HOUR
@@ -559,8 +576,12 @@ do
         fi
         if [ $flag_get_1b_data -ne 0 ] ; then   # L1b data need to be downloaded from sips
            cd $curr_dir
-           source ./cg_get_data_sips.sh $year $doy_str $hhh_str './' $satname $grid 1 $day_night
-           num_files=$?
+#           if [ $sat_id == 30 ] ; then
+#              num_files=lftp -e 'cd ingest/viirs/npp/${year}/${doy_str}/${file_srch};cls -1 | wc -l;quit' ftp://snpp.ssec.wisc.edu
+#           else
+              source ./cg_get_data_sips.sh $year $month $day $hhh_str './' $satname $grid 1 $day_night
+              num_files=$?
+#           fi
            #echo num_files= $num_files
            if [ $num_files -eq 0 ] ; then
               echo No Level 1b Files, Go To The Next Hour!!!
@@ -581,7 +602,7 @@ do
            echo "#SBATCH --ntasks=1" >> $tmp_script
            echo "#SBATCH --cpus-per-task=1" >> $tmp_script
            echo "#SBATCH --output=$logs_path$satname'_'$year'_'$doy_str'_'$hhh_str1'_'$region'_patmosx.log'" >> $tmp_script
-           echo "#SBATCH --mem-per-cpu=50000" >> $tmp_script
+           echo "#SBATCH --mem-per-cpu=30000" >> $tmp_script
            # --- Load modules
            #echo "module purge" >> $tmp_script
            #echo "module load license_intel/S4 intel/14.0-2" >> $tmp_script
@@ -598,15 +619,14 @@ do
            # --- copy scripts to download l1b data
            if [ $flag_get_1b_data -ne 0 ] ; then
               echo "cp $iris_files_path/cg_get_data_sips.sh $tmp_work_dir" >> $tmp_script
+#              echo "cp $iris_files_path/download_viirs_ftp.sh $tmp_work_dir" >> $tmp_script
               echo "cp $iris_files_path/sync_l1b_files_iris.sh $tmp_work_dir" >> $tmp_script
               echo "[ ! -d $l1b_path ] && mkdir -v -p $l1b_path" >> $tmp_script
            fi
 
            # --- copy scripts to make l2 data
            if [ $flag_make_l2 -ne 0 ] ; then
-              echo "[ ! -d $tmp_work_dir/temporary_files ] && mkdir -v -p $tmp_work_dir/temporary_files" >> $tmp_script
               echo "cp $iris_files_path/write_filelist_iris.sh $tmp_work_dir" >> $tmp_script
-#              echo "cp $iris_files_path/get_cfsr_iris.sh $tmp_work_dir" >> $tmp_script
               if [ $flag_reprocess_l2_files -eq 0 ] ; then 
                  echo "cp $iris_files_path/check_filelist_iris.sh $tmp_work_dir" >> $tmp_script
               fi
@@ -620,7 +640,11 @@ do
            # --- download l1b data
            if [ $flag_get_1b_data -ne 0 ] ; then
               echo "echo 'Getting l1b data'" >> $tmp_script
-              echo "./cg_get_data_sips.sh $year $doy_str $hhh_str $l1b_path $satname $grid 0 $day_night" >> $tmp_script
+#           if [ $sat_id == 30 ] ; then
+#              echo "./download_viirs_ftp.sh $year $doy_str $hhh_str $l1b_path" >> $tmp_script
+#           else
+              echo "./cg_get_data_sips.sh $year $month $day $hhh_str $l1b_path $satname $grid 0 $day_night" >> $tmp_script
+#           fi
               echo "echo 'Making sure all files are there, running sync_l1b_files_iris.sh'" >> $tmp_script
               echo "./sync_l1b_files_iris.sh $l1b_path $hhh_str $filetype2" >> $tmp_script
            fi

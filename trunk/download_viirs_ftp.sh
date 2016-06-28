@@ -28,8 +28,8 @@ month_s=$(date -d "01/01/${year} +${doy_s} days -1 day" "+%m")
 day_s=$(date -d "01/01/${year} +${doy_s} days -1 day" "+%d")
 
 # --- construct search string
-srch_str="_npp_d${year}${month_s}${day_s}_t${hour_s}"
-#srch_str="_npp_d${year}${month_s}${day_s}"
+#srch_str="_npp_d${year}${month_s}${day_s}_t${hour_s}"
+srch_str="_npp_d${year}${month_s}${day_s}"
 
 # --- go to level1b folder
 [ ! -d $path ] && mkdir -v -p $path
