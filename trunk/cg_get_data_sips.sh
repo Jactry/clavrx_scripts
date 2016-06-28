@@ -22,6 +22,8 @@ Sensor choises so far:
    MODO2SSH
    MYDO21KM
    MODO21KM
+   CALIPSO_1KM
+   CALIPSO_5KM
 
 Grid choises:
 
@@ -112,6 +114,15 @@ if [[ $sensor == "MOD021KM" ]] ; then
    satellite='terra'
    files_srch='MOD021KM|MOD03|MOD35_L2'
 fi
+if [[ $sensor == "CALIPSO_1KM" ]] ; then                                                                                                                                               
+   satellite='calipso'
+   files_srch='CAL_LID_L2_01kmCLay'
+fi
+if [[ $sensor == "CALIPSO_5KM" ]] ; then
+   satellite='calipso'
+   files_srch='CAL_LID_L2_05kmCLay'
+fi
+
 
 # --- find out what region to get
 # 0 = global;        1 = 45S - 45N;     2 = Great Lakes; 3 = South Atlantic
