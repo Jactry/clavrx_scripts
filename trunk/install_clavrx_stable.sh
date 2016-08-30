@@ -54,16 +54,12 @@ cd $path
 svn checkout -q https://svn.ssec.wisc.edu/repos/cloud_team_clavrx/tags/stable_release_2016b ./
 
 
-cd dcomp
-./configure -hdf5root=$hdf5_path -with-gfortran -hdf4root=${hdf4_path}
-
-
-cd ../nlcomp
+cd dncomp
 ./configure -hdf5root=$hdf5_path -with-gfortran -hdf4root=${hdf4_path}
 
 cd ../main_src
 cp level2_all_on.inc level2.inc
-./configure -hdf5root=$hdf5_path -with-gfortran -hdf4root=${hdf4_path} -netcdflib=${netcdf_path} -nlcomp_dir=../nlcomp/ -dcomp_dir=../dcomp/ -acha_dir=../cloud_acha/
+./configure -hdf5root=$hdf5_path -with-gfortran -hdf4root=${hdf4_path} -netcdflib=${netcdf_path} -dncomp_dir=../dncomp/ -acha_dir=../cloud_acha/
 
 
 
