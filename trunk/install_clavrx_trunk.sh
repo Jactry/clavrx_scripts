@@ -66,7 +66,7 @@ make clean
 
 cd ../main_src
 cp level2_all_on.inc level2.inc
-./configure -hdf5root=$hdf5_path -with-ifort  -hdf4root=${hdf4_path} -netcdflib=${netcdf_path}  -dncomp_dir=../dncomp/ -acha_dir=../cloud_acha/
+./configure -hdf5root=$hdf5_path -with-ifort  -hdf4root=${hdf4_path} -netcdflib=${netcdf_path}  -dncomp_dir=../dncomp/ -acha_dir=../acha/
 make clean
 
 
