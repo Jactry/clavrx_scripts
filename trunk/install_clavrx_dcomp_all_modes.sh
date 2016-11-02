@@ -73,7 +73,7 @@ cd ../dncomp
 
 
 cd ../main_src
-./configure -hdf5root=$hdf5_path -with-ifort -hdf4root=${hdf4_path}  -dncomp_dir=../dncomp/ -acha_dir=../cloud_acha/ -netcdflib=${ncdf_path}
+./configure -hdf5root=$hdf5_path -with-ifort -hdf4root=${hdf4_path}  -dncomp_dir=../dncomp/ -acha_dir=../acha/ -netcdflib=${ncdf_path}
 
 
 
