@@ -66,6 +66,7 @@ cd $path
 svn checkout -q https://svn.ssec.wisc.edu/repos/cloud_team_clavrx/branches/${branch} ./
 
 cd CX_DATA_IO
+./configure -hdf5root=$hdf5_path -with-ifort -hdf4root=${hdf4_path}
 make
 
 cd ../dncomp
