@@ -65,13 +65,12 @@ cd $path
 
 svn checkout -q https://svn.ssec.wisc.edu/repos/cloud_team_clavrx/branches/${branch} ./
 
+cd CX_DATA_IO
+make
 
-
-cd dncomp
+cd ../dncomp
 ./configure -hdf5root=$hdf5_path -with-ifort -hdf4root=${hdf4_path}
 
-cd ../CX_DATA_IO
-make
 
 cd ../main_src
 ./configure -hdf5root=$hdf5_path -with-ifort -hdf4root=${hdf4_path}  -dncomp_dir=../dncomp/ -acha_dir=../cloud_acha/ -netcdflib=${ncdf_path}
