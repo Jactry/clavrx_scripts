@@ -27,6 +27,9 @@ do
    if [[ $srch_str == 'HS_H08' ]] ; then
       l2_file='clavrx_'${i:3:17}'.level2.hdf'
    fi
+   if [[ $srch_str == 'VGEOM' ]] ; then
+      l2_file='clavrx_'${i:6:38}'.level2.hdf'
+   fi
 
    # --- look for L2 file, if exists delete coresponding L1b filename
    #echo "looking for $out_path$l2_file"
@@ -43,6 +46,7 @@ done
 #MYD02SSH.A2014001.1000.006.2014009211230.hdf
 #clavrx_MOD02SSH.A2012001.1735.006.2012290215947.level2.hdf
 #HS_H08_20150324_2130_B01_FLDK.nc
+#VGEOM_snpp_d20160627_t000000_c20160627063619.nc
 
 #echo END OF THE CODE
 
