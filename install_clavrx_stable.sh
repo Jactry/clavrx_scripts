@@ -1,7 +1,6 @@
 #!/bin/bash
 # A.Walther 7 Nov 2013
 # $Header$
-#!/bin/bash
 #
 #   history 20 January 2014: changed to patmosx branch of clavrx (AW)
 #            24 March 2014: for CLAVR-x stable version 
@@ -51,7 +50,7 @@ echo
 mkdir -p  $path
 cd $path
 
-svn checkout -q https://svn.ssec.wisc.edu/repos/cloud_team_clavrx/tags/stable_release_2016b ./
+svn checkout -q https://svn.ssec.wisc.edu/repos/cloud_team_clavrx/tags/stable_release_2016b.1 ./
 
 
 cd dncomp
