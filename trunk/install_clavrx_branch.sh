@@ -11,10 +11,6 @@
 
 set -e
 
-hdf5_path="/opt/hdf5-1.8.8-intel"
-hdf4_path="/usr/local/hdf4"
-
-
 # for convinience: symbol link to local directory
 # I encourage everybody to do this on all machines
 # ln -s <hdf4_path> ~/lib/hdf4
@@ -70,9 +66,16 @@ svn checkout -q https://svn.ssec.wisc.edu/repos/cloud_team_clavrx/branches/${bra
 cd dncomp
 ./configure -hdf5root=$hdf5_path -with-ifort -hdf4root=${hdf4_path}
 
+#cd dcomp
+#./configure -hdf5root=$hdf5_path -with-ifort -hdf4root=${hdf4_path}
+
+#cd ../nlcomp
+#./configure -hdf5root=$hdf5_path -with-ifort -hdf4root=${hdf4_path}
+
 cd ../main_src
 ln -s level2_all_on.inc level2.inc
-./configure -hdf5root=$hdf5_path -with-ifort -hdf4root=${hdf4_path}  -dncomp_dir=../dncomp/ -acha_dir=../cloud_acha/ -netcdflib=${ncdf_path}
+./configure -hdf5root=$hdf5_path -with-ifort -hdf4root=${hdf4_path}  -dncomp_dir=../dncomp/ -acha_dir=../acha/ -netcdflib=${ncdf_path}
+#./configure -hdf5root=$hdf5_path -with-ifort -hdf4root=${hdf4_path}  -dcomp_dir=../dcomp/ -nlcomp_dir=../nlcomp/ -acha_dir=../cloud_acha/ -netcdflib=${ncdf_path}
 
 
 
