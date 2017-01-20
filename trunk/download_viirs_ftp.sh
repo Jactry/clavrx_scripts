@@ -19,9 +19,19 @@
 # --- read arguments
 args=("$@")
 year=${args[0]}
-doy_s=${args[1]}
+doy=${args[1]}
 hour_s=${args[2]}
 path=${args[3]}
+
+# --- add zeroes to doy
+if [ $doy -lt 10 ] ; then
+  doy_s=`expr 00$doy`
+elif [ $doy -ge 10 ] && [ $doy -lt 100 ] ; then
+  doy_s=`expr 0$doy`
+else
+  doy_s=$doy
+fi
+ 
 
 # --- calculate month, day, number of hours per this day
 month_s=$(date -d "01/01/${year} +${doy_s} days -1 day" "+%m")
