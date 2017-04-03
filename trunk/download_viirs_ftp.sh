@@ -89,8 +89,8 @@ cd ../SVM15/
 mget SVM15${srch_str}*
 cd ../SVM16/
 mget SVM16${srch_str}*
-cd ../IICMO/
-mget IICMO${srch_str}*
+cd ../VICMO/
+mget VICMO${srch_str}*
 SCRIPTEND
 
 echo "DONE!"
