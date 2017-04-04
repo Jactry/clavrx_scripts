@@ -16,7 +16,7 @@ set -e
 # ln -s <hdf5_path> ~/lib/hdf5
 hdf5_path=$HOME"/lib/hdf5_gcc/"
 hdf4_path=$HOME"/lib/hdf4_gcc/"
-netcdf_path=$HOME"/lib/netcdf3_gcc/"
+netcdf_path=$HOME"/lib/netcdf4_gcc/"
 
 
 stable_version='clavrx_stable'

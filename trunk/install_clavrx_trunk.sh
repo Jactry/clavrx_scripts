@@ -20,7 +20,7 @@ set -e
 # ln -s <hdf5_path> ~/lib/hdf5
 hdf5_path=$HOME"/lib/hdf5/"
 hdf4_path=$HOME"/lib/hdf4/"
-netcdf_path=$HOME"/lib/netcdf3/"
+netcdf_path=$HOME"/lib/netcdf4/"
 
 path='clavrx_trunk'
 if [ -n "$1" ]
