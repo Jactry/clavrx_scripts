@@ -44,13 +44,13 @@ if [ -d "$path" ]; then
 
 fi
 echo
-echo '...........     svn checkout clavrx stable version 5.4 .................'
+echo '...........     svn checkout clavrx stable version 2017a .................'
 echo
 
 mkdir -p  $path
 cd $path
 
-svn checkout -q https://svn.ssec.wisc.edu/repos/cloud_team_clavrx/tags/stable_release_2016b.1 ./
+svn checkout -q https://svn.ssec.wisc.edu/repos/cloud_team_clavrx/tags/stable_release_2017a ./
 
 
 cd dncomp
