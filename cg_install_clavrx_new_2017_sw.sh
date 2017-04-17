@@ -14,9 +14,9 @@ branch='dcomp_all_modes'
 branch_version=clavrx_${branch}
 
 path=$branch_version
-if [ -n "$2" ]
+if [ -n "$1" ]
 then
-path=$2
+path=$1
 
 fi
 
@@ -48,6 +48,7 @@ echo
 
 mkdir -p  $path
 cd $path
+pwd
 
 svn checkout -q https://svn.ssec.wisc.edu/repos/cloud_team_clavrx/branches/${branch} ./
 
